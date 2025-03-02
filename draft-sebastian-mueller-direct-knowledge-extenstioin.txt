@@ -1,0 +1,184 @@
+
+
+
+
+WG Working Group                                              S. Mueller
+Internet-Draft                                        Ascon Systems GmbH
+Intended status: Informational                              2 March 2025
+Expires: 3 September 2025
+
+
+   Direct Knowledge Extension to the Distance Vector Routing Protocol
+                  draft-todo-yourname-protocol-latest
+
+Abstract
+
+   Abstract Naive Distance Vector based Routing protocols like RIP (RFC
+   here) suffer from a phenomena called the "count-to-infinity problem"
+   in the event of a failure event.  This Internet draft extends the RIP
+   with two simple flags that allow the network to recover quickly and
+   reliably, with no chance of the count to infinity problem to occurr.
+   The basic idea is that the network assumes a node failure in case a
+   direct neighbor reports a loss of connection.  All traffic to that
+   node is halted and all routing information that still advertises the
+   failed node as up is discarded, until a direct neighbor of the node
+   reports it to be reachable.  This direct knowledge is flagged in the
+   new routing information, making clear that the failure event is
+   known, but the advertised route is still available in spite of that.
+   Then this new route is propagated through the network and traffic to
+   the node resumes via the available link.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://example.com/LATEST.  Status information for this document may
+   be found at https://datatracker.ietf.org/doc/draft-todo-yourname-
+   protocol/.
+
+   Discussion of this document takes place on the WG Working Group
+   mailing list (mailto:WG@example.com), which is archived at
+   https://example.com/WG.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/Sebastianmueller22/network-protocol.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 3 September 2025.
+
+Copyright Notice
+
+   Copyright (c) 2025 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  The extension
+   4.  Security Considerations
+   5.  IANA Considerations
+   6.  Normative References
+   Acknowledgments
+   Author's Address
+
+1.  Introduction
+
+   The count to infinity problem occurs when there is a routing loop, so
+   two connected paths to the same network node exist and a failure
+   event occurs.  The nodes within the loop advertise routes via each
+   other to the failed node.  Believing each others advertisements they
+   don't notice the failure and continue to route traffic within the
+   routing loop, until the advertisments reach an "infinity" value, in
+   which case failure is assumed and routing traffic to the failed node
+   stops.  This infinity value poses a restriction on the possible size
+   of the network, because actual routing costs from one end of the
+   network to the other need to remain below that.
+
+   This document introduces two flags to distance vector routing, which
+   prevent this problem from occuring.  This is, in contrast to for
+   example BABEL, not an effort to avoid routing loops.  Two or more
+   connected paths to the same node can exist without a problem.  The
+   fully self-organising nature of a naive Distance Vector Routing based
+   approach is maintained.  A loop in the network topology is no longer
+   a problem with this addition.  Therefore the strict limit to the size
+   of the network introduced in RIP to limit the impact of the count to
+   infinity problem is not needed.  Likewise, split horizon with
+   poisoned reverse is not necessary.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   Count to infinity problem - CTIP
+
+   Distance Vector Routing - DVR
+
+   Routing Information Protocol - RIP
+
+3.  The extension
+
+                 ┌───┐
+                 │ A │
+                 └─┬─┘
+                   │
+                   │
+                   │
+                   │
+                   │
+                   │
+                 ┌─┴─┐
+     ┌───────────┤ B ├───────────┐
+     │           └───┘           │
+     │                           │
+     │                           │
+     │                           │
+   ┌─┴─┐                       ┌─┴─┐
+   │ C ├───────────────────────┤ D │
+   └─┬─┘                       └─┬─┘
+     │                           │
+     │                           │
+     │                           │
+     │            ┌───┐          │
+     └────────────┤ E ├──────────┘
+                  └───┘
+
+4.  Security Considerations
+
+   *  DoS through rouge node
+
+   *  Privacy through advertisement
+
+   *  No authorization by default
+
+   *  etc. etc.
+
+5.  IANA Considerations
+
+   This document has no IANA actions.
+
+6.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Author's Address
+
+   Sebastian Mueller
+   Ascon Systems GmbH
+   Email: muellersebastian@mail.com
