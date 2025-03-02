@@ -79,31 +79,16 @@ Routing Information Protocol - RIP
 
 # The extension
 
-              ┌───┐              
-              │ A │              
-              └─┬─┘              
-                │                
-                │                
-                │                
-                │                
-                │                
-                │                
-              ┌─┴─┐              
-  ┌───────────┤ B ├───────────┐  
-  │           └───┘           │  
-  │                           │  
-  │                           │  
-  │                           │  
-┌─┴─┐                       ┌─┴─┐
-│ C ├───────────────────────┤ D │
-└─┬─┘                       └─┬─┘
-  │                           │  
-  │                           │  
-  │                           │  
-  │            ┌───┐          │  
-  └────────────┤ E ├──────────┘  
-               └───┘             
-
+~~~        
+     A-----B
+      \   / \
+       \ /  |
+        C  /    all networks have cost 1, except
+        | /     for the direct link from C to D, which
+        |/      has cost 10
+        D
+        |<=== target network
+~~~
 
 # Security Considerations
 
