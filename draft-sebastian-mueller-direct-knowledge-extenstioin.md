@@ -79,7 +79,7 @@ Routing Information Protocol - RIP
 
 # The extension
 
-~~~
+~~~ ascii-art
               ┌───┐              
               │ A │              
               └─┬─┘              
