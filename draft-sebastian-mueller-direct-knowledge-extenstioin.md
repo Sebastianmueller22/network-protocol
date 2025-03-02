@@ -79,7 +79,6 @@ Routing Information Protocol - RIP
 
 # The extension
 
-~~~ ascii-art
               ┌───┐              
               │ A │              
               └─┬─┘              
@@ -104,7 +103,6 @@ Routing Information Protocol - RIP
   │            ┌───┐          │  
   └────────────┤ E ├──────────┘  
                └───┘             
-~~~
 
 
 # Security Considerations
