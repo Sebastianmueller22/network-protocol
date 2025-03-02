@@ -1203,17 +1203,14 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       </h2>
 <div class="alignLeft art-text artwork" id="section-3-1">
 <pre>
-          ┌───┐
-          │ A │
-          └─┬─┘
-            │
-            │
-            │
-            │
-            │
-            │
-          ┌─┴─┐                 ┌───────────┤ B ├───────────┐     │           └───┘           │     │                           │     │                           │     │                           │   ┌─┴─┐                       ┌─┴─┐ │ C ├───────────────────────┤ D │ └─┬─┘                       └─┬─┘   │                           │     │                           │     │                           │     │            ┌───┐          │     └────────────┤ E ├──────────┘
-           └───┘
+     A-----B
+      \   / \
+       \ /  |
+        C  /    all networks have cost 1, except
+        | /     for the direct link from C to D, which
+        |/      has cost 10
+        D
+        |&lt;=== target network
 </pre><a href="#section-3-1" class="pilcrow">¶</a>
 </div>
 </section>
