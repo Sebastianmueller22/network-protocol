@@ -35,8 +35,7 @@ informative:
 
 --- abstract
 
-Abstract
-Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a failure event. This Internet draft extends the RIP with two simple flags that allow the network to recover quickly and reliably, with no chance of the count to infinity problem to occurr. The basic idea is that the network assumes a node failure in case a direct neighbor reports a loss of connection. All traffic to that node is halted and all routing information that still advertises the failed node as up is discarded, until a direct neighbor of the node reports it to be reachable. This direct knowledge is flagged in the new routing information, making clear that the failure event is known, but the advertised route is still available in spite of that. Then this new route is propagated through the network and traffic to the node resumes via the available link. 
+Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a failure event. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of the count to infinity problem to occurr.
 
 
 --- middle
