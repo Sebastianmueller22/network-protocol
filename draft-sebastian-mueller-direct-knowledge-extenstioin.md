@@ -35,7 +35,7 @@ informative:
 
 --- abstract
 
-Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a failure event. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of the count to infinity problem to occurr.
+Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a failure. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of the count to infinity problem to occurr.
 
 
 --- middle
@@ -64,9 +64,7 @@ Routing Information Protocol - RIP
 
 # The extension
 
-Two simple concepts are added to a naive DVR implementation. 
-
-First, we add the convention that if a node doesn't receive a Hello message from one of its immediate neighbors for a certain amount of time, it tries to contact it with an are-you-there message which needs to be acknowledged. If this remains unanswered, the node assumes the neighbor to be down. 
+We add the convention that if a node doesn't receive a Hello message from one of its immediate neighbors for a certain amount of time, it tries to contact it with an are-you-there message which needs to be acknowledged. If this remains unanswered, the node assumes the neighbor to be down. 
 It then sends a triggered update on all of its interfaces with the route to the down neighbor being set to -1, or another, similarly impossible value. This signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node perform the following steps:
 
 - They write the infinity value into their routing table
@@ -76,7 +74,7 @@ It then sends a triggered update on all of its interfaces with the route to the 
 
 This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored. 
 
-This goes on until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then sends a triggerd update with a "direct-knowledge-bit" set. Receiving nodes of such an update message will:
+This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then sends a triggerd update with a "direct-knowledge-bit" set. Receiving nodes of such an update message will:
 
 - Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)
 - Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors
@@ -86,6 +84,8 @@ This goes on until a node is reached that has the node in question as part of it
 So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network. 
 
 Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggerd updates and the best remaining path is propagated with the speed of triggered updates as well. 
+
+TODO: this triggered Update thing is cumbersome
 
 
 ~~~        
@@ -101,7 +101,18 @@ Since in the case of a failure no node will believe an update without direct kno
 
 # Security Considerations
 
-- DoS through rouge node
+This document only tries to solve the count to infinity problem. 
+
+The inherent security risks of DVR, such as rogue nodes advertising routes that don't exist, or routes for other nodes to themselves etc. apply here as well. 
+
+The two additions made here pose additional security considerations. A rogue node could advertise all other nodes as being down, wether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.
+
+This is not easily preventable, but can be mitigated with another convention, where updates originating from a node need to cryptographically signed before sending. 
+
+That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway in the context of unstable links).
+
+That 
+
 - Privacy through advertisement
 - No authorization by default
 - etc. etc. 
