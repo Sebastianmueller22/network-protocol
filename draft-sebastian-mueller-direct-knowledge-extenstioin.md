@@ -42,7 +42,7 @@ Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a 
 
 # Introduction
 
-The count to infinity problem occurs when there is a routing loop, so two connected paths to the same network node exist and a failure event occurs. The nodes within the loop advertise routes via each other to the failed node. Believing each others advertisements they don't notice the failure and continue to route traffic within the routing loop, until the advertisments reach an "infinity" value, in which case failure is assumed and routing traffic to the failed node stops. 
+The count to infinity problem occurs when there is a routing loop, so two connected paths to the same network node exist and a failure event occurs. The nodes within the loop advertise routes via each other to the failed node. Believing each others advertisements they don't notice the failure and continue to route traffic within the routing loop, counting up, until the advertisments reach an "infinity" value, in which case failure is assumed and routing traffic to the failed node stops. 
 This infinity value poses a restriction on the possible size of the network, because actual routing costs from one end of the network to the other need to remain below that.
 
 This document introduces two flags to distance vector routing, which prevent this problem from occuring. Therefore the strict limit to the size of the network introduced in RIP to limit the impact of the count to infinity problem is not needed. Likewise, split horizon with poisoned reverse is not necessary. The extension is extremely simple.
@@ -87,17 +87,29 @@ Since in the case of a failure no node will believe an update without direct kno
 
 TODO: this triggered Update thing is cumbersome
 
+# Example
 
-~~~        
-     A-----B
-      \   / \
-       \ /  |
-        C  /    all networks have cost 1, except
-        | /     for the direct link from C to D, which
-        |/      has cost 10
-        D
-        |<=== target network
+We take as an example the following network topology:
+
 ~~~
+        A
+       / \
+      /   \
+     B-----C
+      \   /
+       \ /
+        D 
+       / \
+      /   \
+     E     F
+      \   /
+       \ /
+        G
+~~~
+When the link between F and G fails, F sends an infinity bit to D. D ignores updates reporting G as up from C,B and E and propagates the infinity bit to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity bit, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity bit to A. 
+D receives the advertisment with the DKB set, ignores the infinity bits from F, B and C and propagates this new route to them. B and C ignore the infinity bit from A and send new route with the DKB to A.
+
+Now the network has converged to the new available Path to G.
 
 # Security Considerations
 
@@ -105,17 +117,11 @@ This document only tries to solve the count to infinity problem.
 
 The inherent security risks of DVR, such as rogue nodes advertising routes that don't exist, or routes for other nodes to themselves etc. apply here as well. 
 
-The two additions made here pose additional security considerations. A rogue node could advertise all other nodes as being down, wether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.
+The two additions made here pose additional security risks. A rogue node could advertise all other nodes as being down, wether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.
 
 This is not easily preventable, but can be mitigated with another convention, where updates originating from a node need to cryptographically signed before sending. 
 
-That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway in the context of unstable links).
-
-That 
-
-- Privacy through advertisement
-- No authorization by default
-- etc. etc. 
+That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of unstable links).
 
 
 # IANA Considerations
