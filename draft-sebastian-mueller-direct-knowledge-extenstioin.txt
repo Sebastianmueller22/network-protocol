@@ -4,8 +4,8 @@
 
 WG Working Group                                              S. Mueller
 Internet-Draft                                        Ascon Systems GmbH
-Intended status: Informational                              4 March 2025
-Expires: 5 September 2025
+Intended status: Informational                              8 March 2025
+Expires: 9 September 2025
 
 
    Direct Knowledge Extension to the Distance Vector Routing Protocol
@@ -51,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2025.
+   This Internet-Draft will expire on 9 September 2025.
 
 Copyright Notice
 
@@ -70,9 +70,10 @@ Table of Contents
    2.  Conventions and Definitions
    3.  The count to infinity problem
    4.  The extension
-   5.  Security Considerations
-   6.  IANA Considerations
-   7.  Normative References
+   5.  Example
+   6.  Security Considerations
+   7.  IANA Considerations
+   8.  Normative References
    Acknowledgments
    Author's Address
 
@@ -83,11 +84,12 @@ Table of Contents
    event occurs.  The nodes within the loop advertise routes via each
    other to the failed node.  Believing each others advertisements they
    don't notice the failure and continue to route traffic within the
-   routing loop, until the advertisments reach an "infinity" value, in
-   which case failure is assumed and routing traffic to the failed node
-   stops.  This infinity value poses a restriction on the possible size
-   of the network, because actual routing costs from one end of the
-   network to the other need to remain below that.
+   routing loop, counting up, until the advertisments reach an
+   "infinity" value, in which case failure is assumed and routing
+   traffic to the failed node stops.  This infinity value poses a
+   restriction on the possible size of the network, because actual
+   routing costs from one end of the network to the other need to remain
+   below that.
 
    This document introduces two flags to distance vector routing, which
    prevent this problem from occuring.  Therefore the strict limit to
@@ -173,16 +175,38 @@ Table of Contents
 
    TODO: this triggered Update thing is cumbersome
 
-        A-----B
-         \   / \
-          \ /  |
-           C  /    all networks have cost 1, except
-           | /     for the direct link from C to D, which
-           |/      has cost 10
-           D
-           |<=== target network
+5.  Example
 
-5.  Security Considerations
+   We take as an example the following network topology:
+
+           A
+          / \
+         /   \
+        B-----C
+         \   /
+          \ /
+           D
+          / \
+         /   \
+        E     F
+         \   /
+          \ /
+           G
+
+   When the link between F and G fails, F sends an infinity bit to D.  D
+   ignores updates reporting G as up from C,B and E and propagates the
+   infinity bit to B,C and E.  E knows that G is its direct neighbor and
+   upon receiving the infinity bit, it checks if G is reachable.  Since
+   it is, it advertises a route to G via itself with the direct
+   knowledge bit set.  Meanwhile B and C have sent the infinity bit to
+   A.  D receives the advertisment with the DKB set, ignores the
+   infinity bits from F, B and C and propagates this new route to them.
+   B and C ignore the infinity bit from A and send new route with the
+   DKB to A.
+
+   Now the network has converged to the new available Path to G.
+
+6.  Security Considerations
 
    This document only tries to solve the count to infinity problem.
 
@@ -190,34 +214,25 @@ Table of Contents
    routes that don't exist, or routes for other nodes to themselves etc.
    apply here as well.
 
-   The two additions made here pose additional security considerations.
-   A rogue node could advertise all other nodes as being down, wether
-   they are its neighbor or not.  This would effectively halt
-   communication in the network for a short time and put significant
-   strain on the network while all nodes report their neighbors to still
-   be reachable.
+   The two additions made here pose additional security risks.  A rogue
+   node could advertise all other nodes as being down, wether they are
+   its neighbor or not.  This would effectively halt communication in
+   the network for a short time and put significant strain on the
+   network while all nodes report their neighbors to still be reachable.
 
    This is not easily preventable, but can be mitigated with another
    convention, where updates originating from a node need to
    cryptographically signed before sending.
 
    That way, repeated infinity values from the same node can be ignored
-   for a certain time (which might be advisable anyway in the context of
-   unstable links).
+   for a certain time (which might be advisable anyway, in the context
+   of unstable links).
 
-   That
-
-   *  Privacy through advertisement
-
-   *  No authorization by default
-
-   *  etc. etc.
-
-6.  IANA Considerations
+7.  IANA Considerations
 
    This document has no IANA actions.
 
-7.  Normative References
+8.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
