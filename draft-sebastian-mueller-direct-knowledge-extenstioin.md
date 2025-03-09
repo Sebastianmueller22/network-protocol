@@ -3,24 +3,20 @@ title: "Direct Knowledge Extension to the Distance Vector Routing Protocol"
 abbrev: "TODO - Abbreviation"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-direct-knowledge-extension
 submissiontype: independent  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: false
 v: 3
 area: AREA
-workgroup: WG Working Group
 keyword:
  - count to infinity problem
  - distance vector routing
 venue:
-  group: WG
-  type: Working Group
   mail: WG@example.com
   arch: https://example.com/WG
   github: Sebastianmueller22/network-protocol
-  latest: https://example.com/LATEST
 
 author:
  -
@@ -42,10 +38,10 @@ Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a 
 
 # Introduction
 
-The count to infinity problem occurs when there is a routing loop, so two connected paths to the same network node exist and a failure event occurs. The nodes within the loop advertise routes via each other to the failed node. Believing each others advertisements they don't notice the failure and continue to route traffic within the routing loop, counting up, until the advertisments reach an "infinity" value, in which case failure is assumed and routing traffic to the failed node stops. 
+The count to infinity problem occurs when there is a routing loop, so two connected paths to the same network node exist and a network topology change occurs. The nodes within the loop advertise routes via each other to the failed node. Believing each others advertisements they don't notice the failure and continue to route traffic within the routing loop, counting up, until the advertisments reach an "infinity" value, in which case failure is assumed and routing traffic to the failed node stops. 
 This infinity value poses a restriction on the possible size of the network, because actual routing costs from one end of the network to the other need to remain below that.
 
-This document introduces two flags to distance vector routing, which prevent this problem from occuring. Therefore the strict limit to the size of the network introduced in RIP to limit the impact of the count to infinity problem is not needed. Likewise, split horizon with poisoned reverse is not necessary. The extension is extremely simple.
+This document introduces two flags to distance vector routing, which prevent this problem from occuring. Therefore the strict limit to the size of the network introduced in RIP to limit the impact of the count to infinity problem is not needed. Likewise, split horizon with poisoned reverse or feasability conditions are not necessary. The extension is very simple and was designed to work with a "naive" Bellman Ford based routing protocol such as RIP2, as more sophisticated implementations like Babel (RFCCCCCCCCCC) were themselves introduced as solutions to the count to infinity problem. However, because the extension is very simple, it should be compatible with numerous Distance Vector based routing protocols. 
 
 
 # Conventions and Definitions
@@ -130,8 +126,3 @@ This document has no IANA actions.
 
 
 --- back
-
-# Acknowledgments
-{:numbered="false"}
-
-TODO acknowledge.
