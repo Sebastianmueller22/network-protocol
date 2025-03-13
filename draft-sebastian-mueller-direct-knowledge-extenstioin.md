@@ -54,17 +54,17 @@ Routing Information Protocol - RIP
 
 # The count to infinity problem
 
-
+TODO: more info on how it occurs maybe?
 
 # The extension
 
 We add the convention that if a node doesn't receive a Hello message from one of its immediate neighbors for a certain amount of time, it tries to contact it with an are-you-there message which needs to be acknowledged. If this remains unanswered, the node assumes the neighbor to be down. 
-It then sends a triggered update on all of its interfaces with the route to the down neighbor being set to -1, or another, similarly impossible value. This signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node perform the following steps:
+It then sends a triggered update on all of its interfaces with the route to the down neighbor being set to -1, or another, similarly impossible value. It can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node perform the following steps:
 
 - They write the infinity value into their routing table
 - They stop routing traffic with the failed node as a target and report it to the sender as unreachable
 - They ignore any regular updates that advertise a live route to the failed node
-- They likewise send a triggered update with this "infinity flag" to all their neighbors
+- They likewise send a triggered update with this infinity value to all their neighbors
 
 This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored. 
 
@@ -78,8 +78,6 @@ This goes on, until a node is reached that has the node in question as part of i
 So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network. 
 
 Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggerd updates and the best remaining path is propagated with the speed of triggered updates as well. 
-
-TODO: infinity value vs bit, which one is it? -> value is better, it already exists in the originial RIP2.
 
 # Example
 
@@ -100,8 +98,8 @@ We take as an example the following network topology:
        \ /
         G
 ~~~
-When the link between F and G fails, F sends an infinity bit to D. D ignores updates reporting G as up from C,B and E and propagates the infinity bit to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity bit, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity bit to A. 
-D receives the advertisment with the DKB set, ignores the infinity bits from F, B and C and propagates this new route to them. B and C ignore the infinity bit from A and propagate the new routing information with the DKB to A.
+When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity value to A. 
+D receives the advertisment with the DKB set, ignores the infinity values from F, B and C and propagates this new route to them. B and C ignore the infinity value from A and propagate the new routing information with the DKB to A.
 
 Now the network has converged to the new available Path to G.
 
