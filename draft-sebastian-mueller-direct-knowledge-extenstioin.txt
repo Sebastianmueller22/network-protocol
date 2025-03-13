@@ -4,21 +4,21 @@
 
 Network Working Group                                         S. Mueller
 Internet-Draft                                        Ascon Systems GmbH
-Intended status: Informational                              9 March 2025
-Expires: 10 September 2025
+Intended status: Experimental                              13 March 2025
+Expires: 14 September 2025
 
 
-   Direct Knowledge Extension to the Distance Vector Routing Protocol
+         Direct Knowledge Extension to Distance Vector Routing
                     draft-direct-knowledge-extension
 
 Abstract
 
    Naive Distance Vector based Routing protocols like RIP (RFC here)
    suffer from a phenomena called the "count-to-infinity problem" in the
-   event of a failure.  This Internet draft extends a naive Distance
-   Vector Routing implementation with two simple flags that allow the
-   network to recover quickly and reliably, with no chance of the count
-   to infinity problem to occurr.
+   event of a network topology change.  This Internet draft extends a
+   naive Distance Vector Routing implementation with two simple flags
+   that allow the network to recover quickly and reliably, with no
+   chance of routing loops to occurr.
 
 About This Document
 
@@ -27,8 +27,8 @@ About This Document
    Status information for this document may be found at
    https://datatracker.ietf.org/doc/draft-direct-knowledge/.
 
-   Discussion of this document takes place on the WG Group mailing list
-   (mailto:WG@example.com), which is archived at https://example.com/WG.
+   Discussion of this document takes place on the muellersebastian Group
+   mailing list (mailto:muellersebastian@mail.com).
 
    Source for this draft and an issue tracker can be found at
    https://github.com/Sebastianmueller22/network-protocol.
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 September 2025.
+   This Internet-Draft will expire on 14 September 2025.
 
 Copyright Notice
 
@@ -86,11 +86,11 @@ Table of Contents
    imposes a limitation on the maximum network size, as the actual
    routing costs between distant nodes must remain below this threshold.
 
-   This document introduces two flags to distance vector routing
+   This document introduces a simple flag to distance vector routing
    protocols, addressing the count to infinity problem and eliminating
-   the need for strict network size limits imposed by the Routing
-   Information Protocol (RIP).  Consequently, mechanisms such as split
-   horizon with poisoned reverse and feasibility conditions become
+   the need for strict network size limits imposed by, for example, the
+   Routing Information Protocol (RIP).  Consequently, mechanisms such as
+   split horizon with poisoned reverse and feasibility conditions become
    redundant.  The proposed extension is designed to be compatible with
    "naive" Bellman-Ford based routing protocols like RIP2, rather than
    more sophisticated protocols like Babel, which were often themselves
@@ -145,9 +145,9 @@ Table of Contents
    as part of its direct neighbors.  The receiving node then tries to
    reach the failed node.  If it answers, the failure was actually a
    link failure, not a node failure, or the node recovered in the
-   meantime.  The node that discovers this then sends a triggerd update
-   with a "direct-knowledge-bit" set.  Receiving nodes of such an update
-   message will:
+   meantime.  The node that discovers this then immidately sends a
+   triggerd update with a "direct-knowledge-bit" set.  Receiving nodes
+   of such an update message will:
 
    *  Write this message into their routing table if they have an
       infinity value in there or an update message with higher cost and
@@ -168,12 +168,14 @@ Table of Contents
 
    Since in the case of a failure no node will believe an update without
    direct knowledge of the nodes' continuing or regained liveness, count
-   to infinity cannot occur.  The best path to the node is discovered as
-   soon as the remaining neighbors hear about the failure through the
-   triggerd updates and the best remaining path is propagated with the
-   speed of triggered updates as well.
+   to infinity cannot occur.  All old routing information that
+   potentially is no longer feasible is discarded.  The best path to the
+   node is discovered as soon as the remaining neighbors hear about the
+   failure through the triggerd updates and the best remaining path is
+   propagated with the speed of triggered updates as well.
 
-   TODO: this triggered Update thing is cumbersome
+   TODO: infinity value vs bit, which one is it? -> value is better, it
+   already exists in the originial RIP2.
 
 5.  Example
 
@@ -201,8 +203,8 @@ Table of Contents
    knowledge bit set.  Meanwhile B and C have sent the infinity bit to
    A.  D receives the advertisment with the DKB set, ignores the
    infinity bits from F, B and C and propagates this new route to them.
-   B and C ignore the infinity bit from A and send new route with the
-   DKB to A.
+   B and C ignore the infinity bit from A and propagate the new routing
+   information with the DKB to A.
 
    Now the network has converged to the new available Path to G.
 
@@ -226,7 +228,7 @@ Table of Contents
 
    That way, repeated infinity values from the same node can be ignored
    for a certain time (which might be advisable anyway, in the context
-   of unstable links).
+   of frequently failing links).
 
 7.  IANA Considerations
 
