@@ -1,7 +1,7 @@
 ---
-title: "Direct Knowledge Extension to the Distance Vector Routing Protocol"
-abbrev: "TODO - Abbreviation"
-category: info
+title: "Direct Knowledge Extension to Distance Vector Routing"
+abbrev: ""
+category: exp
 
 docname: draft-direct-knowledge-extension
 submissiontype: independent  # also: "independent", "editorial", "IAB", or "IRTF"
@@ -14,8 +14,7 @@ keyword:
  - count to infinity problem
  - distance vector routing
 venue:
-  mail: WG@example.com
-  arch: https://example.com/WG
+  mail: muellersebastian@mail.com
   github: Sebastianmueller22/network-protocol
 
 author:
@@ -31,7 +30,7 @@ informative:
 
 --- abstract
 
-Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a failure. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of the count to infinity problem to occurr.
+Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a network topology change. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of routing loops to occurr.
 
 
 --- middle
@@ -40,7 +39,7 @@ Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a 
 
 The count to infinity problem arises in distance vector routing protocols when a routing loop forms after a network topology change. In such scenarios, nodes within the loop continue to advertise routes to a failed node through each other. Misled by these advertisements, the nodes fail to recognize the network failure and continue routing traffic within the loop, incrementing the routing metrics until they reach an "infinity" value. At this point, the nodes assume a failure and cease routing traffic to the failed node. The "infinity" value imposes a limitation on the maximum network size, as the actual routing costs between distant nodes must remain below this threshold.
 
-This document introduces two flags to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by the Routing Information Protocol (RIP). Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2, rather than more sophisticated protocols like Babel, which were often themselves developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.
+This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol (RIP). Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2, rather than more sophisticated protocols like Babel, which were often themselves developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.
 
 
 # Conventions and Definitions
@@ -69,7 +68,7 @@ It then sends a triggered update on all of its interfaces with the route to the 
 
 This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored. 
 
-This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then sends a triggerd update with a "direct-knowledge-bit" set. Receiving nodes of such an update message will:
+This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immidately sends a triggerd update with a "direct-knowledge-bit" set. Receiving nodes of such an update message will:
 
 - Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)
 - Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors
@@ -78,9 +77,9 @@ This goes on, until a node is reached that has the node in question as part of i
 
 So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network. 
 
-Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggerd updates and the best remaining path is propagated with the speed of triggered updates as well. 
+Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggerd updates and the best remaining path is propagated with the speed of triggered updates as well. 
 
-TODO: this triggered Update thing is cumbersome
+TODO: infinity value vs bit, which one is it? -> value is better, it already exists in the originial RIP2.
 
 # Example
 
@@ -102,7 +101,7 @@ We take as an example the following network topology:
         G
 ~~~
 When the link between F and G fails, F sends an infinity bit to D. D ignores updates reporting G as up from C,B and E and propagates the infinity bit to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity bit, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity bit to A. 
-D receives the advertisment with the DKB set, ignores the infinity bits from F, B and C and propagates this new route to them. B and C ignore the infinity bit from A and send new route with the DKB to A.
+D receives the advertisment with the DKB set, ignores the infinity bits from F, B and C and propagates this new route to them. B and C ignore the infinity bit from A and propagate the new routing information with the DKB to A.
 
 Now the network has converged to the new available Path to G.
 
@@ -116,7 +115,7 @@ The two additions made here pose additional security risks. A rogue node could a
 
 This is not easily preventable, but can be mitigated with another convention, where updates originating from a node need to cryptographically signed before sending. 
 
-That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of unstable links).
+That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of frequently failing links).
 
 
 # IANA Considerations
