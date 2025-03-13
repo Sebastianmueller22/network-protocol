@@ -151,7 +151,7 @@ Table of Contents
    reach the failed node.  If it answers, the failure was actually a
    link failure, not a node failure, or the node recovered in the
    meantime.  The node that discovers this then immidately sends a
-   triggerd update with a "direct-knowledge-bit" set.  Receiving nodes
+   triggered update with a "direct-knowledge-bit" set.  Receiving nodes
    of such an update message will:
 
    *  Write this message into their routing table if they have an
@@ -176,7 +176,7 @@ Table of Contents
    to infinity cannot occur.  All old routing information that
    potentially is no longer feasible is discarded.  The best path to the
    node is discovered as soon as the remaining neighbors hear about the
-   failure through the triggerd updates and the best remaining path is
+   failure through the triggered updates and the best remaining path is
    propagated with the speed of triggered updates as well.
 
 5.  Example
