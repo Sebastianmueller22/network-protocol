@@ -68,7 +68,7 @@ It then sends a triggered update on all of its interfaces with the route to the 
 
 This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored. 
 
-This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immidately sends a triggerd update with a "direct-knowledge-bit" set. Receiving nodes of such an update message will:
+This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immidately sends a triggered update with a "direct-knowledge-bit" set. Receiving nodes of such an update message will:
 
 - Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)
 - Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors
@@ -77,7 +77,7 @@ This goes on, until a node is reached that has the node in question as part of i
 
 So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network. 
 
-Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggerd updates and the best remaining path is propagated with the speed of triggered updates as well. 
+Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggered updates and the best remaining path is propagated with the speed of triggered updates as well. 
 
 # Example
 
