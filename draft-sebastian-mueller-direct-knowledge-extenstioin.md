@@ -23,7 +23,7 @@ author:
     organization: Ascon Systems GmbH
     email: muellersebastian@mail.com
 normative:
-  TypedArray:
+  RFC 1058:
     -: ta
     target: https://www.rfc-editor.org/info/rfc1058
     title: Routing Information Protocol
@@ -34,6 +34,19 @@ normative:
     format:
       TXT: https://www.rfc-editor.org/rfc/rfc1058.txt
       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc1058.txt.pdf
+
+   RFC 2453:
+    -: ta
+    target: https://datatracker.ietf.org/doc/rfc2453/
+    title: RIP Version 2
+    author:
+      name: Gary S. Malkin
+    date: November 1998
+    seriesinfo: DOI 10.17487/RFC2453
+    format:
+      TXT: https://www.rfc-editor.org/rfc/rfc2453.txt
+      PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc2453.txt.pdf
+   
       
 
 informative:
@@ -54,8 +67,6 @@ This document introduces a simple flag to distance vector routing protocols, add
 
 
 # Conventions and Definitions
-
-{::boilerplate bcp14-tagged}
 
 Count to infinity problem - CTIP
 
