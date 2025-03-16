@@ -49,7 +49,7 @@ normative:
       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc2453.txt.pdf
 
 
-  RFC 6126
+  RFC 6126:
     -: ta
     target: https://www.rfc-editor.org/info/rfc6126
     title: The Babel Routing Protoco
