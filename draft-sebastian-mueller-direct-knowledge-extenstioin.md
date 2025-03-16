@@ -145,7 +145,7 @@ This takes many update cycles and in the case of a node failure, there is no oth
 # The extension
 
 This draft adds the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down. 
-It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1, or another, similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node perform the following steps:
+It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1, or another, similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:
 
 - They write the infinity value into their routing table
 - They stop routing traffic with the failed node as a target and report it to the sender as unreachable
@@ -154,12 +154,12 @@ It then sends a triggered update to all other neighbors with the route to the do
 
 This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored. 
 
-This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immidately sends a triggered update with a "direct-knowledge-bit" set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message will:
+This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immidately sends a triggered update with a "direct-knowledge-bit" set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message MUST:
 
 - Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)
 - Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors
-- They start a timeout and retain the DKB until it expires. Any received infinity values within this time and for this node will be ignored
-- They route traffic via the new path
+- Start a timeout and retain the DKB until it expires. Any received infinity values within this time and for this node will be ignored
+- Route traffic via the new path
 
 So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network. 
 
@@ -199,7 +199,7 @@ The inherent security risks of DVR, such as rogue nodes advertising routes that 
 
 The two additions made here pose additional security risks. A rogue node could advertise all other nodes as being down, wether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.
 
-This is not easily preventable, but can be mitigated with another convention, where updates originating from a node need to cryptographically signed before sending. 
+This is not easily preventable, but can be mitigated with another convention, where updates originating from a node need to cryptographically signed before sending. The public key infrastructure necessary for that would need to be implemented on a higher network level.  
 
 That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of frequently failing links).
 
