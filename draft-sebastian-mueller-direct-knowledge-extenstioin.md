@@ -116,8 +116,6 @@ We will not go through the example further, but it hopefully illustrates the bas
 
 Counting to an arbitrary infinity value is an attempt of naive DVR algorithms such as RIP to resolve routing loops after a network topology change. 
 
-Take, as an example, this topology:
-
 ~~~
         A
        / \
@@ -134,9 +132,9 @@ Take, as an example, this topology:
         G
 ~~~
 
-All link costs are set to 1, except for the link between E and G, which has a cost of 10. When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP RFC, this value is set to 16. Consequently, F propagates the value of 16 to D. Due to the implementation of poisoned reverse, D does not propagate the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to G to 11.
+The lnink costs are the same as in the previous example. When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC](https://www.rfc-editor.org/info/rfc1058), this value is set to 16. Consequently, F propagates the value of 16 to D. Due to the implementation of split horizon, D does not propagate the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to G to 11.
 
-B and C, also implementing poisoned reverse, do not propagate their cost of 3 to D. However, a routing loop still emerges. In the following update cycle, B and C receive D's updated cost of 11 to G. Despite this, they each advertise their previous cost of 3 to each other and to A. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both update their routing tables with a cost of 4 and propagate this new cost to A and D in the next cycle.
+B and C do not propagate their cost of 3 to D because of split horizon. However, a routing loop still emerges. In the following update cycle, B and C receive D's updated cost of 11 to G. Despite this, they each advertise their previous cost of 3 to each other and to A. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both update their routing tables with a cost of 4 and propagate this new cost to A and D in the next cycle.
 
 In subsequent update cycles, the local link cost of 1 is repeatedly added to the cost in the routing loop. It takes a significant number of cycles for this cumulative cost to eventually exceed 12—the only remaining connection to G, at which point the loop resolves and the network converges to this path.
 
@@ -184,7 +182,7 @@ We again take as an example the following network topology:
        \ /
         G
 ~~~
-In this example, contrary to before, we assume no other protection against routing loops than the proposed extension. So poisoned reverse is not implemented, just to show that the extension is sufficient to avoid routing loops.
+In this example, contrary to before, we assume no other protection against routing loops than the proposed extension. So split horizon is not implemented, just to show that the extension is sufficient to avoid routing loops.
 
 When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity value to A. 
 D receives the advertisment with the DKB set, ignores the infinity values from F, B and C and propagates this new route to them. B and C ignore the infinity value from A and propagate the new routing information with the DKB to A.
