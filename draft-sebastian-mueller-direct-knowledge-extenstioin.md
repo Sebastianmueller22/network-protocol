@@ -22,8 +22,19 @@ author:
     fullname: Sebastian Mueller
     organization: Ascon Systems GmbH
     email: muellersebastian@mail.com
-
 normative:
+  TypedArray:
+    -: ta
+    target: https://www.rfc-editor.org/info/rfc1058
+    title: Routing Information Protocol
+    author:
+      name: Hedrick, C.
+    date: June 1988
+    seriesinfo: DOI 10.17487/RFC1058
+    format:
+      TXT: https://www.rfc-editor.org/rfc/rfc1058.txt
+      PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc1058.txt.pdf
+      
 
 informative:
 
