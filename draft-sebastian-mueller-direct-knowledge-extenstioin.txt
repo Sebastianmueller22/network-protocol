@@ -13,12 +13,13 @@ Expires: 17 September 2025
 
 Abstract
 
-   Naive Distance Vector based Routing protocols like RIP (RFC here)
-   suffer from a phenomena called the "count-to-infinity problem" in the
-   event of a network topology change.  This Internet draft extends a
-   naive Distance Vector Routing implementation with two simple flags
-   that allow the network to recover quickly and reliably, with no
-   chance of routing loops to occurr.
+   Naive Distance Vector based Routing protocols like RIP (RFC 1058
+   (https://www.rfc-editor.org/info/rfc1058)) suffer from a phenomena
+   called the "count-to-infinity problem" in the event of a network
+   topology change.  This Internet draft extends a naive Distance Vector
+   Routing implementation with a simple flag that allows the network to
+   recover quickly and reliably, with no chance of routing loops to
+   occurr.
 
 About This Document
 
@@ -65,12 +66,13 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Count to infinity
-   4.  The extension
-   5.  Example
-   6.  Security Considerations
-   7.  IANA Considerations
-   8.  Normative References
+   3.  Distance Vector Routing
+   4.  Count to infinity
+   5.  The extension
+   6.  Example
+   7.  Security Considerations
+   8.  IANA Considerations
+   9.  Normative References
    Author's Address
 
 1.  Introduction
@@ -92,19 +94,15 @@ Table of Contents
    Routing Information Protocol (RIP).  Consequently, mechanisms such as
    split horizon with poisoned reverse and feasibility conditions become
    redundant.  The proposed extension is designed to be compatible with
-   "naive" Bellman-Ford based routing protocols like RIP2, rather than
-   more sophisticated protocols like Babel, which were often themselves
-   developed to tackle the count to infinity problem.  Due to its
-   simplicity, this extension should still be compatible with various
-   distance vector-based routing protocols.
+   "naive" Bellman-Ford based routing protocols like RIP2 (RFC 2453
+   (https://datatracker.ietf.org/doc/rfc2453/)), rather than more
+   sophisticated protocols like Babel (RFC 6126 (https://www.rfc-
+   editor.org/info/rfc6126)) , which were often themselves developed to
+   tackle the count to infinity problem.  Due to its simplicity, this
+   extension should still be compatible with various distance vector-
+   based routing protocols though.
 
 2.  Conventions and Definitions
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    Count to infinity problem - CTIP
 
@@ -112,13 +110,18 @@ Table of Contents
 
    Routing Information Protocol - RIP
 
-3.  Count to infinity
+3.  Distance Vector Routing
 
-   Counting to an arbitrary infinity value is an attempt of naive DVR
-   algorithms such as RIP to resolve routing loops after a network
-   topology change.
+   Explaining the details of Bellmand Ford algorithm based routing is
+   beyond the scope of this document, but in this section a quick
+   overview is given.  The basic principle is that nodes only exchange
+   routing information with their direct neighbors.  The local link
+   costs are added to the advertised routing cost of a given, more
+   distant node and the path with the lowest cost is chosen.  Only the
+   next hop to any given node or network needs to be saved by network
+   participants.
 
-   Take, as an example, this topology:
+   Take this network as an example:
 
            A
           / \
@@ -134,24 +137,58 @@ Table of Contents
           \ /
            G
 
-   All link costs are set to 1, except for the link between E and G,
-   which has a cost of 10.  When the link between F and G fails, a naive
-   implementation of DVR sets the cost between F and G to an "infinity
-   value" — a positive integer larger than the highest legal routing
-   cost.  According to the original RIP RFC, this value is set to 16.
-   Consequently, F propagates the value of 16 to D.  Due to the
-   implementation of poisoned reverse, D does not propagate the cost of
-   2 back to F.  Instead, D selects E as the next best hop to G,
+   If the cost between E and G is 10, while all other link costs are 1,
+   E advertises a cost of 10 to D, and F advertises a cost of 1.  D
+   calculates the total cost to reach G via E as 11 by adding 1 to E's
+   advertised cost.  However, since the path to G via F has a lower cost
+   of 2, D selects F as the next hop to G and updates its routing table
+   accordingly.  In the next update cycle, D advertises its path to G
+   through itself, with a total cost of 2.
+
+   We will not go through the example further, but it hopefully
+   illustrates the basic workings of these routing protocols.  For
+   interested readers, the according sections in the RFCs 6126
+   (https://www.rfc-editor.org/info/rfc6126) and 2453
+   (https://datatracker.ietf.org/doc/rfc2453/) are reccommended.
+
+4.  Count to infinity
+
+   Counting to an arbitrary infinity value is an attempt of naive DVR
+   algorithms such as RIP to resolve routing loops after a network
+   topology change.
+
+           A
+          / \
+         /   \
+        B-----C
+         \   /
+          \ /
+           D
+          / \
+         /   \
+        E     F
+         \   /
+          \ /
+           G
+
+   The lnink costs are the same as in the previous example.  When the
+   link between F and G fails, a naive implementation of DVR sets the
+   cost between F and G to an "infinity value" — a positive integer
+   larger than the highest legal routing cost.  According to the
+   original RIP RFC (https://www.rfc-editor.org/info/rfc1058), this
+   value is set to 16.  Consequently, F propagates the value of 16 to D.
+   Due to the implementation of split horizon, D does not propagate the
+   cost of 2 back to F.  Instead, D selects E as the next best hop to G,
    updating its cost to G to 11.
 
-   B and C, also implementing poisoned reverse, do not propagate their
-   cost of 3 to D.  However, a routing loop still emerges.  In the
-   following update cycle, B and C receive D's updated cost of 11 to G.
-   Despite this, they each advertise their previous cost of 3 to each
-   other and to A.  This causes B and C to believe they can route
-   traffic to G via one another, without realizing their paths go
-   through D.  As a result, both update their routing tables with a cost
-   of 4 and propagate this new cost to A and D in the next cycle.
+   B and C do not propagate their cost of 3 to D because of split
+   horizon.  However, a routing loop still emerges.  In the following
+   update cycle, B and C receive D's updated cost of 11 to G.  Despite
+   this, they each advertise their previous cost of 3 to each other and
+   to A.  This causes B and C to believe they can route traffic to G via
+   one another, without realizing their paths go through D.  As a
+   result, both update their routing tables with a cost of 4 and
+   propagate this new cost to A and D in the next cycle.
 
    In subsequent update cycles, the local link cost of 1 is repeatedly
    added to the cost in the routing loop.  It takes a significant number
@@ -167,7 +204,7 @@ Table of Contents
    consuming and restricts the range of permissable routing costs and
    thereby the possible size of the network.
 
-4.  The extension
+5.  The extension
 
    This draft adds the convention that if a node doesn't receive an
    update message from one of its immediate neighbors for a certain
@@ -180,7 +217,7 @@ Table of Contents
    It cannot be a positive integer since we make no limitation on the
    network size.  This infinity value signals the failure event to the
    rest of the network.  All receiving nodes that aren't direct
-   neighbors to the failed node perform the following steps:
+   neighbors to the failed node MUST perform the following steps:
 
    *  They write the infinity value into their routing table
 
@@ -204,7 +241,7 @@ Table of Contents
    meantime.  The node that discovers this then immidately sends a
    triggered update with a "direct-knowledge-bit" set.  This is best
    implemented as a bit in the update datagram.  Receiving nodes of such
-   an update message will:
+   an update message MUST:
 
    *  Write this message into their routing table if they have an
       infinity value in there or an update message with higher cost and
@@ -214,11 +251,10 @@ Table of Contents
    *  Trigger an update message advertising this new route with the
       direct knowledge bit set to all their neighbors
 
-   *  They start a timeout and retain the DKB until it expires.  Any
-      received infinity values within this time and for this node will
-      be ignored
+   *  Start a timeout and retain the DKB until it expires.  Any received
+      infinity values within this time and for this node will be ignored
 
-   *  They route traffic via the new path
+   *  Route traffic via the new path
 
    So the "good news" that it was actually a link failure or the node is
    up again travels just as fast through the network.
@@ -231,7 +267,7 @@ Table of Contents
    failure through the triggered updates and the best remaining path is
    propagated with the speed of triggered updates as well.
 
-5.  Example
+6.  Example
 
    We again take as an example the following network topology:
 
@@ -250,9 +286,9 @@ Table of Contents
            G
 
    In this example, contrary to before, we assume no other protection
-   against routing loops than the proposed extension.  So poisoned
-   reverse is not implemented, just to show that the extension is
-   sufficient to avoid routing loops.
+   against routing loops than the proposed extension.  So split horizon
+   is not implemented, just to show that the extension is sufficient to
+   avoid routing loops.
 
    When the link between F and G fails, F sends an infinity value to D.
    D ignores updates reporting G as up from C,B and E and propagates the
@@ -267,7 +303,7 @@ Table of Contents
 
    Now the network has converged to the new available Path to G.
 
-6.  Security Considerations
+7.  Security Considerations
 
    This document only tries to solve the count to infinity problem.
 
@@ -283,31 +319,31 @@ Table of Contents
 
    This is not easily preventable, but can be mitigated with another
    convention, where updates originating from a node need to
-   cryptographically signed before sending.
+   cryptographically signed before sending.  The public key
+   infrastructure necessary for that would need to be implemented on a
+   higher network level.
 
    That way, repeated infinity values from the same node can be ignored
    for a certain time (which might be advisable anyway, in the context
    of frequently failing links).
 
-7.  IANA Considerations
+8.  IANA Considerations
 
    This document has no IANA actions.
 
-8.  Normative References
+9.  Normative References
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
-
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
-
-   [TypedArray]
-              C., H., "Routing Information Protocol", DOI 10.17487/
+   [RFC_1058] C., H., "Routing Information Protocol", DOI 10.17487/
               RFC1058 , June 1988,
               <https://www.rfc-editor.org/info/rfc1058>.
+
+   [RFC_2453] Malkin, G. S., "RIP Version 2", DOI 10.17487/RFC2453 ,
+              November 1998,
+              <https://datatracker.ietf.org/doc/rfc2453/>.
+
+   [RFC_6126] Chroboczek, J., "The Babel Routing Protoco", DOI 10.17487/
+              RFC6126 , April 2011,
+              <https://www.rfc-editor.org/info/rfc6126>.
 
 Author's Address
 

@@ -7,7 +7,7 @@
 <title>Direct Knowledge Extension to Distance Vector Routing</title>
 <meta content="Sebastian Mueller" name="author">
 <meta content='
-       Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a network topology change. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of routing loops to occurr. 
+       Naive Distance Vector based Routing protocols like RIP ( RFC 1058 ) suffer from a phenomena called the "count-to-infinity problem"  in the event of a network topology change. This Internet draft extends a naive Distance Vector Routing implementation with a simple flag that allows the network to recover quickly and reliably, with no chance of routing loops to occurr. 
     ' name="description">
 <meta content="xml2rfc 3.28.0" name="generator">
 <meta content="count to infinity problem" name="keyword">
@@ -1080,7 +1080,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Direct Knowledge Extension to Distance Vector Routing</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a network topology change. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of routing loops to occurr.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">Naive Distance Vector based Routing protocols like RIP (<a href="https://www.rfc-editor.org/info/rfc1058">RFC 1058</a>) suffer from a phenomena called the "count-to-infinity problem"  in the event of a network topology change. This Internet draft extends a naive Distance Vector Routing implementation with a simple flag that allows the network to recover quickly and reliably, with no chance of routing loops to occurr.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1147,25 +1147,28 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-count-to-infinity" class="internal xref">Count to infinity</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-distance-vector-routing" class="internal xref">Distance Vector Routing</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-the-extension" class="internal xref">The extension</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-count-to-infinity" class="internal xref">Count to infinity</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-example" class="internal xref">Example</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-the-extension" class="internal xref">The extension</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-example" class="internal xref">Example</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1177,7 +1180,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">The count to infinity problem arises in distance vector routing protocols when a routing loop forms after a network topology change. In such scenarios, nodes within the loop continue to advertise routes to a failed node through each other. Misled by these advertisements, the nodes fail to recognize the network failure and continue routing traffic within the loop, incrementing the routing metrics until they reach an "infinity" value. At this point, the nodes assume a failure and cease routing traffic to the failed node. The infinity value imposes a limitation on the maximum network size, as the actual routing costs between distant nodes must remain below this threshold.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol (RIP). Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2, rather than more sophisticated protocols like Babel, which were often themselves developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol (RIP). Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2 (<a href="https://datatracker.ietf.org/doc/rfc2453/">RFC 2453</a>), rather than more sophisticated protocols like Babel (<a href="https://www.rfc-editor.org/info/rfc6126">RFC 6126</a>) , which were often themselves developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols though.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1185,22 +1188,18 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-conventions-and-definitions">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
       </h2>
-<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
-"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
-described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
-appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">Count to infinity problem - CTIP<a href="#section-2-2" class="pilcrow">¶</a></p>
-<p id="section-2-3">Distance Vector Routing - DVR<a href="#section-2-3" class="pilcrow">¶</a></p>
-<p id="section-2-4">Routing Information Protocol - RIP<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-1">Count to infinity problem - CTIP<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Distance Vector Routing - DVR<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">Routing Information Protocol - RIP<a href="#section-2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="count-to-infinity">
+<div id="distance-vector-routing">
 <section id="section-3">
-      <h2 id="name-count-to-infinity">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-count-to-infinity" class="section-name selfRef">Count to infinity</a>
+      <h2 id="name-distance-vector-routing">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-distance-vector-routing" class="section-name selfRef">Distance Vector Routing</a>
       </h2>
-<p id="section-3-1">Counting to an arbitrary infinity value is an attempt of naive DVR algorithms such as RIP to resolve routing loops after a network topology change.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Take, as an example, this topology:<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-1">Explaining the details of Bellmand Ford algorithm based routing is beyond the scope of this document, but in this section a quick overview is given. The basic principle is that nodes only exchange routing information with their direct neighbors. The local link costs are added to the advertised routing cost of a given, more distant node and the path with the lowest cost is chosen. Only the next hop to any given node or network needs to be saved by network participants.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Take this network as an example:<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3-3">
 <pre>
         A
@@ -1218,60 +1217,17 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         G
 </pre><a href="#section-3-3" class="pilcrow">¶</a>
 </div>
-<p id="section-3-4">All link costs are set to 1, except for the link between E and G, which has a cost of 10. When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP RFC, this value is set to 16. Consequently, F propagates the value of 16 to D. Due to the implementation of poisoned reverse, D does not propagate the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to G to 11.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">B and C, also implementing poisoned reverse, do not propagate their cost of 3 to D. However, a routing loop still emerges. In the following update cycle, B and C receive D's updated cost of 11 to G. Despite this, they each advertise their previous cost of 3 to each other and to A. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both update their routing tables with a cost of 4 and propagate this new cost to A and D in the next cycle.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">In subsequent update cycles, the local link cost of 1 is repeatedly added to the cost in the routing loop. It takes a significant number of cycles for this cumulative cost to eventually exceed 12—the only remaining connection to G, at which point the loop resolves and the network converges to this path.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">This takes many update cycles and in the case of a node failure, there is no other way out of it other than to count up to an arbitrary infinity value. This value serves as an arbitrary threshold to terminate the process once it becomes excessively large. While effective in halting the loop, reaching this limit is time-consuming and restricts the range of permissable routing costs and thereby the possible size of the network.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-4">If the cost between E and G is 10, while all other link costs are 1, E advertises a cost of 10 to D, and F advertises a cost of 1. D calculates the total cost to reach G via E as 11 by adding 1 to E's advertised cost. However, since the path to G via F has a lower cost of 2, D selects F as the next hop to G and updates its routing table accordingly. In the next update cycle, D advertises its path to G through itself, with a total cost of 2.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">We will not go through the example further, but it hopefully illustrates the basic workings of these routing protocols. For interested readers, the according sections in the RFCs <a href="https://www.rfc-editor.org/info/rfc6126">6126</a> and <a href="https://datatracker.ietf.org/doc/rfc2453/">2453</a> are reccommended.<a href="#section-3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="the-extension">
+<div id="count-to-infinity">
 <section id="section-4">
-      <h2 id="name-the-extension">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-the-extension" class="section-name selfRef">The extension</a>
+      <h2 id="name-count-to-infinity">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-count-to-infinity" class="section-name selfRef">Count to infinity</a>
       </h2>
-<p id="section-4-1">This draft adds the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down. 
-It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1, or another, similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node perform the following steps:<a href="#section-4-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4-2.1">
-          <p id="section-4-2.1.1">They write the infinity value into their routing table<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.2">
-          <p id="section-4-2.2.1">They stop routing traffic with the failed node as a target and report it to the sender as unreachable<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.3">
-          <p id="section-4-2.3.1">They ignore any regular updates that advertise a live route to the failed node<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.4">
-          <p id="section-4-2.4.1">They likewise send a triggered update with this infinity value to all their neighbors<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-4-3">This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immidately sends a triggered update with a "direct-knowledge-bit" set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message will:<a href="#section-4-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4-5.1">
-          <p id="section-4-5.1.1">Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)<a href="#section-4-5.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-5.2">
-          <p id="section-4-5.2.1">Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors<a href="#section-4-5.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-5.3">
-          <p id="section-4-5.3.1">They start a timeout and retain the DKB until it expires. Any received infinity values within this time and for this node will be ignored<a href="#section-4-5.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-5.4">
-          <p id="section-4-5.4.1">They route traffic via the new path<a href="#section-4-5.4.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-4-6">So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network.<a href="#section-4-6" class="pilcrow">¶</a></p>
-<p id="section-4-7">Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggered updates and the best remaining path is propagated with the speed of triggered updates as well.<a href="#section-4-7" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="example">
-<section id="section-5">
-      <h2 id="name-example">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-example" class="section-name selfRef">Example</a>
-      </h2>
-<p id="section-5-1">We again take as an example the following network topology:<a href="#section-5-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5-2">
+<p id="section-4-1">Counting to an arbitrary infinity value is an attempt of naive DVR algorithms such as RIP to resolve routing loops after a network topology change.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4-2">
 <pre>
         A
        / \
@@ -1286,51 +1242,121 @@ It then sends a triggered update to all other neighbors with the route to the do
       \   /
        \ /
         G
-</pre><a href="#section-5-2" class="pilcrow">¶</a>
+</pre><a href="#section-4-2" class="pilcrow">¶</a>
 </div>
-<p id="section-5-3">In this example, contrary to before, we assume no other protection against routing loops than the proposed extension. So poisoned reverse is not implemented, just to show that the extension is sufficient to avoid routing loops.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity value to A. 
-D receives the advertisment with the DKB set, ignores the infinity values from F, B and C and propagates this new route to them. B and C ignore the infinity value from A and propagate the new routing information with the DKB to A.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">Now the network has converged to the new available Path to G.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-4-3">The lnink costs are the same as in the previous example. When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP <a href="https://www.rfc-editor.org/info/rfc1058">RFC</a>, this value is set to 16. Consequently, F propagates the value of 16 to D. Due to the implementation of split horizon, D does not propagate the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to G to 11.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">B and C do not propagate their cost of 3 to D because of split horizon. However, a routing loop still emerges. In the following update cycle, B and C receive D's updated cost of 11 to G. Despite this, they each advertise their previous cost of 3 to each other and to A. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both update their routing tables with a cost of 4 and propagate this new cost to A and D in the next cycle.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">In subsequent update cycles, the local link cost of 1 is repeatedly added to the cost in the routing loop. It takes a significant number of cycles for this cumulative cost to eventually exceed 12—the only remaining connection to G, at which point the loop resolves and the network converges to this path.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-6">This takes many update cycles and in the case of a node failure, there is no other way out of it other than to count up to an arbitrary infinity value. This value serves as an arbitrary threshold to terminate the process once it becomes excessively large. While effective in halting the loop, reaching this limit is time-consuming and restricts the range of permissable routing costs and thereby the possible size of the network.<a href="#section-4-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="the-extension">
+<section id="section-5">
+      <h2 id="name-the-extension">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-the-extension" class="section-name selfRef">The extension</a>
+      </h2>
+<p id="section-5-1">This draft adds the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down. 
+It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1, or another, similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:<a href="#section-5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-2.1">
+          <p id="section-5-2.1.1">They write the infinity value into their routing table<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.2">
+          <p id="section-5-2.2.1">They stop routing traffic with the failed node as a target and report it to the sender as unreachable<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.3">
+          <p id="section-5-2.3.1">They ignore any regular updates that advertise a live route to the failed node<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.4">
+          <p id="section-5-2.4.1">They likewise send a triggered update with this infinity value to all their neighbors<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-5-3">This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immidately sends a triggered update with a "direct-knowledge-bit" set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message MUST:<a href="#section-5-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-5.1">
+          <p id="section-5-5.1.1">Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)<a href="#section-5-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-5.2">
+          <p id="section-5-5.2.1">Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors<a href="#section-5-5.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-5.3">
+          <p id="section-5-5.3.1">Start a timeout and retain the DKB until it expires. Any received infinity values within this time and for this node will be ignored<a href="#section-5-5.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-5.4">
+          <p id="section-5-5.4.1">Route traffic via the new path<a href="#section-5-5.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-5-6">So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-7">Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggered updates and the best remaining path is propagated with the speed of triggered updates as well.<a href="#section-5-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="example">
+<section id="section-6">
+      <h2 id="name-example">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-example" class="section-name selfRef">Example</a>
+      </h2>
+<p id="section-6-1">We again take as an example the following network topology:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6-2">
+<pre>
+        A
+       / \
+      /   \
+     B-----C
+      \   /
+       \ /
+        D
+       / \
+      /   \
+     E     F
+      \   /
+       \ /
+        G
+</pre><a href="#section-6-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6-3">In this example, contrary to before, we assume no other protection against routing loops than the proposed extension. So split horizon is not implemented, just to show that the extension is sufficient to avoid routing loops.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity value to A. 
+D receives the advertisment with the DKB set, ignores the infinity values from F, B and C and propagates this new route to them. B and C ignore the infinity value from A and propagate the new routing information with the DKB to A.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">Now the network has converged to the new available Path to G.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-6">
+<section id="section-7">
       <h2 id="name-security-considerations">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-6-1">This document only tries to solve the count to infinity problem.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">The inherent security risks of DVR, such as rogue nodes advertising routes that don't exist, or routes for other nodes to themselves etc. apply here as well.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">The two additions made here pose additional security risks. A rogue node could advertise all other nodes as being down, wether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.<a href="#section-6-3" class="pilcrow">¶</a></p>
-<p id="section-6-4">This is not easily preventable, but can be mitigated with another convention, where updates originating from a node need to cryptographically signed before sending.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of frequently failing links).<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-7-1">This document only tries to solve the count to infinity problem.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">The inherent security risks of DVR, such as rogue nodes advertising routes that don't exist, or routes for other nodes to themselves etc. apply here as well.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">The two additions made here pose additional security risks. A rogue node could advertise all other nodes as being down, wether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">This is not easily preventable, but can be mitigated with another convention, where updates originating from a node need to cryptographically signed before sending. The public key infrastructure necessary for that would need to be implemented on a higher network level.<a href="#section-7-4" class="pilcrow">¶</a></p>
+<p id="section-7-5">That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of frequently failing links).<a href="#section-7-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-iana-considerations">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-7-1">This document has no IANA actions.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">This document has no IANA actions.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-normative-references">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-normative-references">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
-<dt id="RFC2119">[RFC2119]</dt>
+<dt id="RFC_1058">[RFC_1058]</dt>
       <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8174">[RFC8174]</dt>
-      <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="TypedArray">[TypedArray]</dt>
-    <dd>
 <span class="refAuthor">C., H.</span>, <span class="refTitle">"Routing Information Protocol"</span>, <span class="seriesInfo">DOI 10.17487/RFC1058 </span>, <time datetime="1988-06" class="refDate">June 1988</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc1058">https://www.rfc-editor.org/info/rfc1058</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC_2453">[RFC_2453]</dt>
+      <dd>
+<span class="refAuthor">Malkin, G. S.</span>, <span class="refTitle">"RIP Version 2"</span>, <span class="seriesInfo">DOI 10.17487/RFC2453 </span>, <time datetime="1998-11" class="refDate">November 1998</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/rfc2453/">https://datatracker.ietf.org/doc/rfc2453/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC_6126">[RFC_6126]</dt>
+    <dd>
+<span class="refAuthor">Chroboczek, J.</span>, <span class="refTitle">"The Babel Routing Protoco"</span>, <span class="seriesInfo">DOI 10.17487/RFC6126 </span>, <time datetime="2011-04" class="refDate">April 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6126">https://www.rfc-editor.org/info/rfc6126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
