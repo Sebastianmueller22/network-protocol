@@ -304,6 +304,11 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+   [TypedArray]
+              C., H., "Routing Information Protocol", DOI 10.17487/
+              RFC1058 , June 1988,
+              <https://www.rfc-editor.org/info/rfc1058>.
+
 Author's Address
 
    Sebastian Mueller
