@@ -36,30 +36,30 @@ normative:
       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc1058.txt.pdf
 
 
-   RFC 2453:
-     -: ta
-     target: https://datatracker.ietf.org/doc/rfc2453/
-     title: RIP Version 2
-     author:
-       name: Gary S. Malkin
-     date: November 1998
-     seriesinfo: DOI 10.17487/RFC2453
-     format:
-       TXT: https://www.rfc-editor.org/rfc/rfc2453.txt
-       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc2453.txt.pdf
+  RFC 2453:
+    -: ta
+    target: https://datatracker.ietf.org/doc/rfc2453/
+    title: RIP Version 2
+    author:
+      name: Gary S. Malkin
+    date: November 1998
+    seriesinfo: DOI 10.17487/RFC2453
+    format:
+      TXT: https://www.rfc-editor.org/rfc/rfc2453.txt
+      PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc2453.txt.pdf
 
 
-   RFC 6126
-     -: ta
-     target: https://www.rfc-editor.org/info/rfc6126
-     title: The Babel Routing Protoco
-     author:
-       name: Juliusz Chroboczek
-     date: apr 2011
-     seriesinfo: DOI 10.17487/RFC6126
-     format:
-       TXT: https://www.rfc-editor.org/rfc/rfc6126.txt
-       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc6126.txt.pdf
+  RFC 6126
+    -: ta
+    target: https://www.rfc-editor.org/info/rfc6126
+    title: The Babel Routing Protoco
+    author:
+      name: Juliusz Chroboczek
+    date: apr 2011
+    seriesinfo: DOI 10.17487/RFC6126
+    format:
+      TXT: https://www.rfc-editor.org/rfc/rfc6126.txt
+      PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc6126.txt.pdf
    
       
 
