@@ -46,6 +46,18 @@ normative:
     format:
       TXT: https://www.rfc-editor.org/rfc/rfc2453.txt
       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc2453.txt.pdf
+
+   RFC 6126
+   -: ta
+    target: https://www.rfc-editor.org/info/rfc6126
+    title: The Babel Routing Protoco
+    author:
+      name: Juliusz Chroboczek
+    date: apr 2011
+    seriesinfo: DOI 10.17487/RFC6126
+    format:
+      TXT: https://www.rfc-editor.org/rfc/rfc6126.txt
+      PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc6126.txt.pdf
    
       
 
@@ -54,7 +66,7 @@ informative:
 
 --- abstract
 
-Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a phenomena called the "count-to-infinity problem"  in the event of a network topology change. This Internet draft extends a naive Distance Vector Routing implementation with two simple flags that allow the network to recover quickly and reliably, with no chance of routing loops to occurr.
+Naive Distance Vector based Routing protocols like RIP ([RFC 1058](https://www.rfc-editor.org/info/rfc1058)) suffer from a phenomena called the "count-to-infinity problem"  in the event of a network topology change. This Internet draft extends a naive Distance Vector Routing implementation with a simple flag that allows the network to recover quickly and reliably, with no chance of routing loops to occurr.
 
 
 --- middle
@@ -63,7 +75,7 @@ Naive Distance Vector based Routing protocols like RIP (RFC here) suffer from a 
 
 The count to infinity problem arises in distance vector routing protocols when a routing loop forms after a network topology change. In such scenarios, nodes within the loop continue to advertise routes to a failed node through each other. Misled by these advertisements, the nodes fail to recognize the network failure and continue routing traffic within the loop, incrementing the routing metrics until they reach an "infinity" value. At this point, the nodes assume a failure and cease routing traffic to the failed node. The infinity value imposes a limitation on the maximum network size, as the actual routing costs between distant nodes must remain below this threshold.
 
-This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol (RIP). Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2, rather than more sophisticated protocols like Babel, which were often themselves developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.
+This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol (RIP). Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2 ([RFC 2453](https://datatracker.ietf.org/doc/rfc2453/)), rather than more sophisticated protocols like Babel ([RFC 6126](https://www.rfc-editor.org/info/rfc6126)) , which were often themselves developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols though.
 
 
 # Conventions and Definitions
@@ -73,6 +85,32 @@ Count to infinity problem - CTIP
 Distance Vector Routing - DVR
 
 Routing Information Protocol - RIP
+
+# Distance Vector Routing
+
+Explaining the details of Bellmand Ford algorithm based routing is beyond the scope of this document, but in this section a quick overview is given. The basic principle is that nodes only exchange routing information with their direct neighbors. The local link costs are added to the advertised routing cost of a given, more distant node and the path with the lowest cost is chosen. Only the next hop to any given node or network needs to be saved by network participants.
+
+Take this network as an example:
+
+~~~
+        A
+       / \
+      /   \
+     B-----C
+      \   /
+       \ /
+        D 
+       / \
+      /   \
+     E     F
+      \   /
+       \ /
+        G
+~~~
+
+If the cost between E and G is 10, while all other link costs are 1, E advertises a cost of 10 to D, and F advertises a cost of 1. D calculates the total cost to reach G via E as 11 by adding 1 to E's advertised cost. However, since the path to G via F has a lower cost of 2, D selects F as the next hop to G and updates its routing table accordingly. In the next update cycle, D advertises its path to G through itself, with a total cost of 2.
+
+We will not go through the example further, but it hopefully illustrates the basic workings of these routing protocols. For interested readers, the according sections in the RFCs [6126](https://www.rfc-editor.org/info/rfc6126) and [2453](https://datatracker.ietf.org/doc/rfc2453/) are reccommended.
 
 # Count to infinity
 
