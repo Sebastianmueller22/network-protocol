@@ -20,7 +20,6 @@ venue:
 author:
  -
     fullname: Sebastian Mueller
-    organization: Ascon Systems GmbH
     email: muellersebastian@mail.com
 normative:
   RFC 1058:
