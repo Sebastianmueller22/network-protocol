@@ -3,8 +3,8 @@
 
 
 Network Working Group                                         S. Mueller
-Internet-Draft                                        Ascon Systems GmbH
-Intended status: Experimental                              23 March 2025
+Internet-Draft                                             23 March 2025
+Intended status: Experimental                                           
 Expires: 24 September 2025
 
 
@@ -347,5 +347,4 @@ Table of Contents
 Author's Address
 
    Sebastian Mueller
-   Ascon Systems GmbH
    Email: muellersebastian@mail.com
