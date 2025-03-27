@@ -51,7 +51,7 @@ normative:
   RFC 6126:
     -: ta
     target: https://www.rfc-editor.org/info/rfc6126
-    title: The Babel Routing Protoco
+    title: The Babel Routing Protocol
     author:
       name: Juliusz Chroboczek
     date: apr 2011
@@ -67,7 +67,7 @@ informative:
 
 --- abstract
 
-Naive Distance Vector-based routing protocols like the Routing Information Protocol ([RFC 1058](https://www.rfc-editor.org/info/rfc1058)) suffer from a phenomena called the "count to infinity problem"  in the event of a network topology change. This Internet Draft extends a naive Distance Vector routing implementation with a simple flag that allows the network to recover quickly and reliably, with no chance of routing loops to occur.
+Naive Distance Vector-based routing protocols like the Routing Information Protocol [RFC 1058] suffer from a phenomena called the "count to infinity problem"  in the event of a network topology change. This Internet Draft extends a naive Distance Vector routing implementation with a simple flag that allows the network to recover quickly and reliably, with no chance of routing loops to occur.
 
 
 --- middle
@@ -76,7 +76,7 @@ Naive Distance Vector-based routing protocols like the Routing Information Proto
 
 The count to infinity problem arises in distance vector routing protocols when a routing loop forms after a network topology change. In such scenarios, nodes within the loop continue to advertise routes to a failed node through each other. Misled by these advertisements, the nodes fail to recognize the network failure and continue routing traffic within the loop, incrementing the routing metrics until they reach an "infinity" value. At this point, the nodes assume a failure and cease routing traffic to the failed node. The infinity value imposes a limitation on the maximum network size, as the actual routing costs between distant nodes must remain below this threshold.
 
-This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol (RIP). Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2 ([RFC 2453](https://datatracker.ietf.org/doc/rfc2453/)), rather than more sophisticated protocols like Babel ([RFC 6126](https://www.rfc-editor.org/info/rfc6126)) , which were developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.
+This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol [RFC 1058]. Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2 [RFC 2453], rather than more sophisticated protocols like Babel [RFC 6126] , which were developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.
 
 
 # Conventions and Definitions
@@ -111,7 +111,7 @@ Take this network as an example:
 
 If the cost between E and G is 10, while all other link costs are 1, E advertises a cost of 10 to D, while F advertises a cost of 1. D calculates the total cost to reach G via E as 11 by adding 1 to E's advertised cost. However, since the path to G via F has a lower cost of 2, D selects F as the next hop to G and updates its routing table accordingly. In the next update cycle, D advertises its path to G through itself, with a total cost of 2.
 
-We will not go through the example further, but it hopefully illustrates the basic workings of these routing protocols. For interested readers, the according sections in the RFCs [6126](https://www.rfc-editor.org/info/rfc6126) and [2453](https://datatracker.ietf.org/doc/rfc2453/) are reccommended.
+We will not go through the example further, but it hopefully illustrates the basic workings of these routing protocols. For interested readers, the according sections in the RFCs [RFC 6126]  and [RFC 2453] are reccommended.
 
 # Count to infinity
 
@@ -135,7 +135,7 @@ Counting to an arbitrary infinity value is an attempt of naive DVR algorithms su
 
 The link costs are the same as in the previous example. We assume one basic protection against routing loops, namely split horizon with poisoned reverse. This means that nodes which have a node as their next hop in their routing table, don't advertise this route to that next hop. Routing loops can still emerge though, as we will see in this example.
 
-When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC](https://www.rfc-editor.org/info/rfc1058), this value is set to 16. Consequently, F propagates the value of 16 to D. Due to the implementation of split horizon, D does not propagate the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to G to 11.
+When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC 1058], this value is set to 16. Consequently, F propagates the value of 16 to D. Due to the implementation of split horizon, D does not propagate the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to G to 11.
 
 B and C do not propagate their cost of 3 to D because of split horizon. In the following update cycle, B and C receive D's updated cost of 11 to G. In the same update cycle, they each advertise their previous cost of 3 to each other and to A, because those are not their next hop, which is still D. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both add the local link cost of 1 to the routing cost of 3 and propagate this "new" route to A and D in the next cycle.
 
