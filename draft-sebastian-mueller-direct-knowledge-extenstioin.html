@@ -1187,9 +1187,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-conventions-and-definitions">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
       </h2>
-<p id="section-2-1">Count to infinity problem - CTIP<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">Distance Vector Routing - DVR<a href="#section-2-2" class="pilcrow">¶</a></p>
-<p id="section-2-3">Routing Information Protocol - RIP<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Count to infinity problem - CTIP<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">Distance Vector Routing - DVR<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">Routing Information Protocol - RIP<a href="#section-2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="distance-vector-routing">
@@ -1256,7 +1260,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-the-extension" class="section-name selfRef">The extension</a>
       </h2>
 <p id="section-5-1">This draft proposes the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down. 
-It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1 or another similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:<a href="#section-5-1" class="pilcrow">¶</a></p>
+It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1 or another similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node <span class="bcp14">MUST</span> perform the following steps:<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-2.1">
           <p id="section-5-2.1.1">They write the infinity value into their routing table<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
@@ -1272,7 +1276,7 @@ It then sends a triggered update to all other neighbors with the route to the do
 </li>
       </ul>
 <p id="section-5-3">This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was either a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immedately sends a triggered update with a "direct-knowledge-bit" set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message MUST:<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-4">This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was either a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immedately sends a triggered update with a "direct-knowledge-bit" set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message <span class="bcp14">MUST</span>:<a href="#section-5-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-5.1">
           <p id="section-5-5.1.1">Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)<a href="#section-5-5.1.1" class="pilcrow">¶</a></p>
@@ -1346,6 +1350,14 @@ D receives the advertisement with the DKB set, ignores the infinity values from 
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC_1058">[RFC_1058]</dt>
       <dd>
 <span class="refAuthor">C., H.</span>, <span class="refTitle">"Routing Information Protocol"</span>, <span class="seriesInfo">DOI 10.17487/RFC1058 </span>, <time datetime="1988-06" class="refDate">June 1988</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc1058">https://www.rfc-editor.org/info/rfc1058</a>&gt;</span>. </dd>
