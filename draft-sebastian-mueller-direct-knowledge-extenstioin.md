@@ -81,6 +81,8 @@ This document introduces a simple flag to distance vector routing protocols, add
 
 # Conventions and Definitions
 
+{::boilerplate bcp14-tagged}
+
 Count to infinity problem - CTIP
 
 Distance Vector Routing - DVR
