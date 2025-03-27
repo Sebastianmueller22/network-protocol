@@ -14,12 +14,11 @@ Expires: 28 September 2025
 Abstract
 
    Naive Distance Vector-based routing protocols like the Routing
-   Information Protocol (RFC 1058 (https://www.rfc-editor.org/info/
-   rfc1058)) suffer from a phenomena called the "count to infinity
-   problem" in the event of a network topology change.  This Internet
-   Draft extends a naive Distance Vector routing implementation with a
-   simple flag that allows the network to recover quickly and reliably,
-   with no chance of routing loops to occur.
+   Information Protocol [RFC_1058] suffer from a phenomena called the
+   "count to infinity problem" in the event of a network topology
+   change.  This Internet Draft extends a naive Distance Vector routing
+   implementation with a simple flag that allows the network to recover
+   quickly and reliably, with no chance of routing loops to occur.
 
 About This Document
 
@@ -91,16 +90,14 @@ Table of Contents
    This document introduces a simple flag to distance vector routing
    protocols, addressing the count to infinity problem and eliminating
    the need for strict network size limits imposed by, for example, the
-   Routing Information Protocol (RIP).  Consequently, mechanisms such as
-   split horizon with poisoned reverse and feasibility conditions become
-   redundant.  The proposed extension is designed to be compatible with
-   "naive" Bellman-Ford based routing protocols like RIP2 (RFC 2453
-   (https://datatracker.ietf.org/doc/rfc2453/)), rather than more
-   sophisticated protocols like Babel (RFC 6126 (https://www.rfc-
-   editor.org/info/rfc6126)) , which were developed to tackle the count
-   to infinity problem.  Due to its simplicity, this extension should
-   still be compatible with various distance vector-based routing
-   protocols.
+   Routing Information Protocol [RFC_1058].  Consequently, mechanisms
+   such as split horizon with poisoned reverse and feasibility
+   conditions become redundant.  The proposed extension is designed to
+   be compatible with "naive" Bellman-Ford based routing protocols like
+   RIP2 [RFC_2453], rather than more sophisticated protocols like Babel
+   [RFC_6126] , which were developed to tackle the count to infinity
+   problem.  Due to its simplicity, this extension should still be
+   compatible with various distance vector-based routing protocols.
 
 2.  Conventions and Definitions
 
@@ -145,9 +142,8 @@ Table of Contents
 
    We will not go through the example further, but it hopefully
    illustrates the basic workings of these routing protocols.  For
-   interested readers, the according sections in the RFCs 6126
-   (https://www.rfc-editor.org/info/rfc6126) and 2453
-   (https://datatracker.ietf.org/doc/rfc2453/) are reccommended.
+   interested readers, the according sections in the RFCs [RFC_6126] and
+   [RFC_2453] are reccommended.
 
 4.  Count to infinity
 
@@ -179,11 +175,10 @@ Table of Contents
    When the link between F and G fails, a naive implementation of DVR
    sets the cost between F and G to an "infinity value" — a positive
    integer larger than the highest legal routing cost.  According to the
-   original RIP RFC (https://www.rfc-editor.org/info/rfc1058), this
-   value is set to 16.  Consequently, F propagates the value of 16 to D.
-   Due to the implementation of split horizon, D does not propagate the
-   cost of 2 back to F.  Instead, D selects E as the next best hop to G,
-   updating its cost to G to 11.
+   original RIP [RFC_1058], this value is set to 16.  Consequently, F
+   propagates the value of 16 to D.  Due to the implementation of split
+   horizon, D does not propagate the cost of 2 back to F.  Instead, D
+   selects E as the next best hop to G, updating its cost to G to 11.
 
    B and C do not propagate their cost of 3 to D because of split
    horizon.  In the following update cycle, B and C receive D's updated
@@ -347,8 +342,8 @@ Table of Contents
               November 1998,
               <https://datatracker.ietf.org/doc/rfc2453/>.
 
-   [RFC_6126] Chroboczek, J., "The Babel Routing Protoco", DOI 10.17487/
-              RFC6126 , April 2011,
+   [RFC_6126] Chroboczek, J., "The Babel Routing Protocol", DOI
+              10.17487/RFC6126 , April 2011,
               <https://www.rfc-editor.org/info/rfc6126>.
 
 Author's Address
