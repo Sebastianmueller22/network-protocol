@@ -154,7 +154,7 @@ Table of Contents
    with a cost of 4.
 
    We only considered the cost to reach G in this example (and will
-   continue to do so for the remainder this draft).  This is
+   continue to do so for the remainder of this draft).  This is
    simultaneously done for all other network participants though.
    Hopefully this quick example is enough to understand the principle of
    the routing algorithm.  For interested readers, the according
