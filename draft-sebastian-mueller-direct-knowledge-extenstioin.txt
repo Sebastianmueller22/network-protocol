@@ -198,9 +198,9 @@ Table of Contents
 
    B and C do not advertise their cost of 3 to D because of split
    horizon.  In the following update cycle, B and C receive D's updated
-   cost to reach G of 11.  In the same update cycle, they each advertise
-   their previous cost of 3 to each other and to A, because those are
-   not their next hop, which is still D.  This causes B and C to believe
+   cost of 11.  In the same update cycle, they each advertise their
+   previous cost of 3 to each other and to A, because those are not
+   their next hop, which is still D.  This causes B and C to believe
    they can route traffic to G via one another, without realizing their
    paths go through D.  As a result, both add the local link cost of 1
    to the routing cost of 3 and propagate this "new" route to A and D in
@@ -213,12 +213,12 @@ Table of Contents
    converges to this path.
 
    This takes a long time and in the case of a node failure, there is no
-   other way out of it other than to count up to an arbitrary infinity
-   value (16 in this example).  This value serves as an arbitrary
-   threshold to terminate the process once it becomes excessively large.
-   While effective in halting the loop, reaching this limit is time-
-   consuming and restricts the range of permissible routing costs and
-   thereby the possible size of the network.
+   way out of it other than to count up to an arbitrary infinity value
+   (16 in this example).  This value serves as an arbitrary threshold to
+   terminate the process once it becomes excessively large.  While
+   effective in halting the loop, reaching this limit is time-consuming
+   and restricts the range of permissible routing costs and thereby the
+   possible size of the network.
 
 5.  The extension
 
@@ -231,7 +231,7 @@ Table of Contents
    -1 or another similarly impossible value.  This can also be
    implemented as a separate flag in the routing information datagram.
    Although this is an adapted version of the "infinity value" of the
-   RIP, it cannot be a positive integer since we make no limitation on
+   RIP, it cannot be a positive number since we make no limitation on
    the network size.  This infinity value signals the failure event to
    the rest of the network.  All receiving nodes that aren't direct
    neighbors to the failed node MUST perform the following steps:
@@ -265,8 +265,8 @@ Table of Contents
       DKB set, or a regular routing cost (they didn't know about the
       failure yet)
 
-   *  Trigger an update message advertising this new route with the
-      direct knowledge bit set to all their neighbors
+   *  Trigger an update message advertising this new route with the DKB
+      set to all their neighbors
 
    *  Start a timeout and retain the DKB until the timeout expires.  Any
       received infinity values within this time and for this node will
