@@ -76,7 +76,7 @@ Naive Distance Vector-based routing protocols like the Routing Information Proto
 
 The count to infinity problem arises in distance vector routing protocols when a routing loop forms after a network topology change. In such scenarios, nodes within the loop continue to advertise routes to a failed node through each other. Misled by these advertisements, the nodes fail to recognize the network failure and continue routing traffic within the loop, incrementing the routing metrics until they reach an "infinity" value. At this point, the nodes assume a failure and cease routing traffic to the failed node. The infinity value imposes a limitation on the maximum network size, as the actual routing costs between distant nodes must remain below this threshold.
 
-This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol [RFC 1058]. Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2 [RFC 2453], rather than more sophisticated protocols like Babel [RFC 6126] , which were developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.
+This document introduces a simple flag to distance vector routing protocols, addressing the count to infinity problem and eliminating the need for strict network size limits imposed by, for example, the Routing Information Protocol [RFC 1058]. Consequently, mechanisms such as split horizon with poisoned reverse and feasibility conditions become redundant. The proposed extension is designed to be compatible with "naive" Bellman-Ford based routing protocols like RIP2 [RFC 2453] rather than more sophisticated protocols like Babel [RFC 6126] , which were developed to tackle the count to infinity problem. Due to its simplicity, this extension should still be compatible with various distance vector-based routing protocols.
 
 
 # Conventions and Definitions
@@ -88,6 +88,8 @@ Count to infinity problem - CTIP
 Distance Vector Routing - DVR
 
 Routing Information Protocol - RIP
+
+Direct Knowledge Bit - DKB
 
 # Distance Vector Routing
 
@@ -111,9 +113,11 @@ Take this network as an example:
         G
 ~~~
 
-If the cost between E and G is 10, while all other link costs are 1, E advertises a cost of 10 to D, while F advertises a cost of 1. D calculates the total cost to reach G via E as 11 by adding 1 to E's advertised cost. However, since the path to G via F has a lower cost of 2, D selects F as the next hop to G and updates its routing table accordingly. In the next update cycle, D advertises its path to G through itself, with a total cost of 2.
+How does the network participants decide on the best path to G?
 
-We will not go through the example further, but it hopefully illustrates the basic workings of these routing protocols. For interested readers, the according sections in the RFCs [RFC 6126]  and [RFC 2453] are reccommended.
+If the cost between E and G is 10, while all other link costs are 1, E advertises a cost of 10 to D, while F advertises a cost of 1. D calculates the total cost to reach G via E as 11 by adding 1 to E's advertised cost. However, since the path to G via F has a lower total cost of 2, D selects F as the next hop to G and updates its routing table accordingly. In the next update cycle, D advertises its path to G through itself, with a total cost of 2. B and C add their local link cost of 1 and update their total cost to reach G to 3. In the next update cycle A selects either B or C as its next hop with a cost of 4.
+
+We only considered the cost to reach G in this example (and will continue to do so for the remainder this draft). This is simultaneously done for all other network participants though. Hopefully this quick example is enough to understand the principle of the routing algorithm. For interested readers, the according sections in the RFCs [RFC 6126]  and [RFC 2453] are reccommended.
 
 # Count to infinity
 
@@ -135,11 +139,11 @@ Counting to an arbitrary infinity value is an attempt of naive DVR algorithms su
         G
 ~~~
 
-The link costs are the same as in the previous example. We assume one basic protection against routing loops, namely split horizon with poisoned reverse. This means that nodes which have a node as their next hop in their routing table, don't advertise this route to that next hop. Routing loops can still emerge though, as we will see in this example.
+The link costs are the same as in the previous example. We assume one basic protection against routing loops, namely split horizon with poisoned reverse. This means that, for example, when node A has node C as next hop to G in its routing table, it will not advertise this route to C (because the route goes via C, C knows about it). Routing loops can still emerge though, as we will see in this example.
 
-When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC 1058], this value is set to 16. Consequently, F propagates the value of 16 to D. Due to the implementation of split horizon, D does not propagate the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to G to 11.
+When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC 1058], this value is set to 16. Consequently, F advertises the value of 16 to D. Due to the implementation of split horizon, D does not advertise the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to reach G to 11.
 
-B and C do not propagate their cost of 3 to D because of split horizon. In the following update cycle, B and C receive D's updated cost of 11 to G. In the same update cycle, they each advertise their previous cost of 3 to each other and to A, because those are not their next hop, which is still D. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both add the local link cost of 1 to the routing cost of 3 and propagate this "new" route to A and D in the next cycle.
+B and C do not advertise their cost of 3 to D because of split horizon. In the following update cycle, B and C receive D's updated cost to reach G of 11. In the same update cycle, they each advertise their previous cost of 3 to each other and to A, because those are not their next hop, which is still D. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both add the local link cost of 1 to the routing cost of 3 and propagate this "new" route to A and D in the next cycle.
 
 In subsequent update cycles, the cost of 1 is repeatedly added to the cost in the routing loop. It takes a significant number of cycles for this cumulative cost to eventually exceed 12 — the only remaining connection to G, at which point the loop resolves and the network converges to this path.
 
@@ -148,7 +152,7 @@ This takes a long time and in the case of a node failure, there is no other way 
 # The extension
 
 This draft proposes the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down. 
-It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1 or another similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. It cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:
+It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1 or another similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. Although this is an adapted version of the "infinity value" of the RIP, it cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:
 
 - They write the infinity value into their routing table
 - They stop routing traffic with the failed node as a target and report it to the sender as unreachable
@@ -157,14 +161,14 @@ It then sends a triggered update to all other neighbors with the route to the do
 
 This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored. 
 
-This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was either a link failure, not a node failure, or the node recovered in the meantime. The node that discovers this then immedately sends a triggered update with a "direct-knowledge-bit" set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message MUST:
+This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that receives a reply from its neighbor then immedately sends a triggered update with a "direct-knowledge-bit" (DKB) set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message MUST:
 
 - Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)
 - Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors
-- Start a timeout and retain the DKB until it expires. Any received infinity values within this time and for this node will be ignored
+- Start a timeout and retain the DKB until the timeout expires. Any received infinity values within this time and for this node will be ignored
 - Route traffic via the new path
 
-So the "good news" that it was actually a link failure or the node is up again travels just as fast through the network. 
+So the "good news" travels with the full speed of triggered updates as well. 
 
 Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is then discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggered updates and the best remaining path is propagated with the speed of triggered updates as well. 
 
@@ -189,8 +193,8 @@ We again take as an example the following network topology:
 ~~~
 In this example, contrary to before, we assume no other protection against routing loops than the proposed extension. So split horizon is not implemented, just to show that the extension is sufficient to avoid routing loops.
 
-When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the direct knowledge bit set. Meanwhile B and C have sent the infinity value to A. 
-D receives the advertisement with the DKB set, ignores the infinity values from F, B and C, and propagates this new route to them. B and C ignore the infinity value from A and propagate the new routing information with the DKB to A.
+When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the DKB set. Meanwhile B and C have sent the infinity value to A. 
+D receives the advertisement with the DKB set, ignores the infinity values from F, B and C, and advertises this new route to them. B and C ignore the infinity value from A and advertise the new routing information with the DKB to A.
 
 Now the network has converged to the remaining path to G.
 
