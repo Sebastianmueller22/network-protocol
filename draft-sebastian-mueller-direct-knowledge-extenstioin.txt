@@ -140,7 +140,7 @@ Table of Contents
           \ /
            G
 
-   How does the network participants decide on the best path to G?
+   How do the network participants decide on the best path to G?
 
    If the cost between E and G is 10, while all other link costs are 1,
    E advertises a cost of 10 to D, while F advertises a cost of 1.  D

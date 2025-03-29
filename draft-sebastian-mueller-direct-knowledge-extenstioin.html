@@ -1221,7 +1221,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         G
 </pre><a href="#section-3-3" class="pilcrow">¶</a>
 </div>
-<p id="section-3-4">How does the network participants decide on the best path to G?<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-4">How do the network participants decide on the best path to G?<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">If the cost between E and G is 10, while all other link costs are 1, E advertises a cost of 10 to D, while F advertises a cost of 1. D calculates the total cost to reach G via E as 11 by adding 1 to E's advertised cost. However, since the path to G via F has a lower total cost of 2, D selects F as the next hop to G and updates its routing table accordingly. In the next update cycle, D advertises its path to G through itself, with a total cost of 2. B and C add their local link cost of 1 and update their total cost to reach G to 3. In the next update cycle A selects either B or C as its next hop with a cost of 4.<a href="#section-3-5" class="pilcrow">¶</a></p>
 <p id="section-3-6">We only considered the cost to reach G in this example (and will continue to do so for the remainder this draft). This is simultaneously done for all other network participants though. Hopefully this quick example is enough to understand the principle of the routing algorithm. For interested readers, the according sections in the RFCs <span>[<a href="#RFC_6126" class="cite xref">RFC_6126</a>]</span>  and <span>[<a href="#RFC_2453" class="cite xref">RFC_2453</a>]</span> are reccommended.<a href="#section-3-6" class="pilcrow">¶</a></p>
 </section>
