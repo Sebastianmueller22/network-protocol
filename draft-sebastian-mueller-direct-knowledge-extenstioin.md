@@ -143,16 +143,16 @@ The link costs are the same as in the previous example. We assume one basic prot
 
 When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC 1058], this value is set to 16. Consequently, F advertises the value of 16 to D. Due to the implementation of split horizon, D does not advertise the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to reach G to 11.
 
-B and C do not advertise their cost of 3 to D because of split horizon. In the following update cycle, B and C receive D's updated cost to reach G of 11. In the same update cycle, they each advertise their previous cost of 3 to each other and to A, because those are not their next hop, which is still D. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both add the local link cost of 1 to the routing cost of 3 and propagate this "new" route to A and D in the next cycle.
+B and C do not advertise their cost of 3 to D because of split horizon. In the following update cycle, B and C receive D's updated cost of 11. In the same update cycle, they each advertise their previous cost of 3 to each other and to A, because those are not their next hop, which is still D. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both add the local link cost of 1 to the routing cost of 3 and propagate this "new" route to A and D in the next cycle.
 
 In subsequent update cycles, the cost of 1 is repeatedly added to the cost in the routing loop. It takes a significant number of cycles for this cumulative cost to eventually exceed 12 — the only remaining connection to G, at which point the loop resolves and the network converges to this path.
 
-This takes a long time and in the case of a node failure, there is no other way out of it other than to count up to an arbitrary infinity value (16 in this example). This value serves as an arbitrary threshold to terminate the process once it becomes excessively large. While effective in halting the loop, reaching this limit is time-consuming and restricts the range of permissible routing costs and thereby the possible size of the network. 
+This takes a long time and in the case of a node failure, there is no way out of it other than to count up to an arbitrary infinity value (16 in this example). This value serves as an arbitrary threshold to terminate the process once it becomes excessively large. While effective in halting the loop, reaching this limit is time-consuming and restricts the range of permissible routing costs and thereby the possible size of the network. 
 
 # The extension
 
 This draft proposes the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down. 
-It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1 or another similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. Although this is an adapted version of the "infinity value" of the RIP, it cannot be a positive integer since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:
+It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1 or another similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. Although this is an adapted version of the "infinity value" of the RIP, it cannot be a positive number since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:
 
 - They write the infinity value into their routing table
 - They stop routing traffic with the failed node as a target and report it to the sender as unreachable
@@ -164,7 +164,7 @@ This "bad news" travels with the full speed of triggered updates through the net
 This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that receives a reply from its neighbor then immedately sends a triggered update with a "direct-knowledge-bit" (DKB) set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message MUST:
 
 - Write this message into their routing table if they have an infinity value in there or an update message with higher cost and DKB set, or a regular routing cost (they didn't know about the failure yet)
-- Trigger an update message advertising this new route with the direct knowledge bit set to all their neighbors
+- Trigger an update message advertising this new route with the DKB set to all their neighbors
 - Start a timeout and retain the DKB until the timeout expires. Any received infinity values within this time and for this node will be ignored
 - Route traffic via the new path
 
