@@ -1308,7 +1308,7 @@ It then sends a triggered update to all other neighbors with the route to the do
 </pre><a href="#section-6-2" class="pilcrow">¶</a>
 </div>
 <p id="section-6-3">In this example, contrary to before, we assume no other protection against routing loops than the proposed extension. So split horizon is not implemented, just to show that the extension is sufficient to avoid routing loops.<a href="#section-6-3" class="pilcrow">¶</a></p>
-<p id="section-6-4">When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the DKB set. Meanwhile B and C have sent the infinity value to A. 
+<p id="section-6-4">When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the DKB set. Meanwhile B and C have sent the infinity value to A.
 D receives the advertisement with the DKB set, ignores the infinity values from F, B and C, and advertises this new route to them. B and C ignore the infinity value from A and advertise the new routing information with the DKB to A.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5">Now the network has converged to the remaining path to G.<a href="#section-6-5" class="pilcrow">¶</a></p>
 </section>
