@@ -4,6 +4,7 @@ category: exp
 
 docname: draft-mueller-dkextension-latest
 submissiontype: independent  # also: "independent", "editorial", "IAB", or "IRTF"
+v: 3
 keyword:
  - count to infinity problem
  - distance vector routing
