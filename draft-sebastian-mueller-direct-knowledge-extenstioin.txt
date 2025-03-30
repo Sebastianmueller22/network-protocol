@@ -14,7 +14,7 @@ Expires: 1 October 2025
 Abstract
 
    Naive Distance Vector-based routing protocols like the Routing
-   Information Protocol [RFC 1058] suffer from a phenomena called the
+   Information Protocol [RFC_1058] suffer from a phenomena called the
    "count to infinity problem" in the event of a network topology
    change.  This Internet Draft extends a naive Distance Vector routing
    implementation with a simple flag that allows the network to recover
@@ -77,12 +77,12 @@ Table of Contents
    This document introduces a simple flag to distance vector routing
    protocols, addressing the count to infinity problem and eliminating
    the need for strict network size limits imposed by, for example, the
-   Routing Information Protocol [RFC 1058].  Consequently, mechanisms
+   Routing Information Protocol [RFC_1058].  Consequently, mechanisms
    such as split horizon with poisoned reverse and feasibility
    conditions become redundant.  The proposed extension is designed to
    be compatible with "naive" Bellman-Ford based routing protocols like
-   RIP2 [RFC 2453] rather than more sophisticated protocols like Babel
-   [RFC 6126] , which were developed to tackle the count to infinity
+   RIP2 [RFC_2453] rather than more sophisticated protocols like Babel
+   [RFC_6126] , which were developed to tackle the count to infinity
    problem.  Due to its simplicity, this extension should still be
    compatible with various distance vector-based routing protocols.
 
