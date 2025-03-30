@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Mueller</td>
-<td class="center">Expires 30 September 2025</td>
+<td class="center">Expires 1 October 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-direct-knowledge-extension</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-03-29" class="published">29 March 2025</time>
+<time datetime="2025-03-30" class="published">30 March 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-09-30">30 September 2025</time></dd>
+<dd class="expires"><time datetime="2025-10-01">1 October 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1113,7 +1113,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1333,7 +1333,7 @@ D receives the advertisement with the DKB set, ignores the infinity values from 
       </h2>
 <p id="section-7-1">This document only tries to solve the count to infinity problem.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">The inherent security risks of DVR, such as rogue nodes advertising routes that don't exist, or routes for other nodes to themselves etc., apply here as well.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">The two additions made here pose additional security risks. A rogue node could advertise all other nodes as being down whether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-3">The additions proposed in this draft pose additional security risks. A rogue node could advertise all other nodes as being down whether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.<a href="#section-7-3" class="pilcrow">¶</a></p>
 <p id="section-7-4">This is not easily preventable, but can be mitigated with another convention where updates originating from a node need to cryptographically signed before sending. The public key infrastructure necessary for that would need to be implemented on a higher network level.<a href="#section-7-4" class="pilcrow">¶</a></p>
 <p id="section-7-5">That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of frequently failing links).<a href="#section-7-5" class="pilcrow">¶</a></p>
 </section>

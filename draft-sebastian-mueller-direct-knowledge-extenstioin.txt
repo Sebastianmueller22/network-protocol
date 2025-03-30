@@ -3,9 +3,9 @@
 
 
 Network Working Group                                         S. Mueller
-Internet-Draft                                             29 March 2025
+Internet-Draft                                             30 March 2025
 Intended status: Experimental                                           
-Expires: 30 September 2025
+Expires: 1 October 2025
 
 
          Direct Knowledge Extension to Distance Vector Routing
@@ -48,7 +48,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 September 2025.
+   This Internet-Draft will expire on 1 October 2025.
 
 Copyright Notice
 
@@ -330,11 +330,12 @@ Table of Contents
    routes that don't exist, or routes for other nodes to themselves
    etc., apply here as well.
 
-   The two additions made here pose additional security risks.  A rogue
-   node could advertise all other nodes as being down whether they are
-   its neighbor or not.  This would effectively halt communication in
-   the network for a short time and put significant strain on the
-   network while all nodes report their neighbors to still be reachable.
+   The additions proposed in this draft pose additional security risks.
+   A rogue node could advertise all other nodes as being down whether
+   they are its neighbor or not.  This would effectively halt
+   communication in the network for a short time and put significant
+   strain on the network while all nodes report their neighbors to still
+   be reachable.
 
    This is not easily preventable, but can be mitigated with another
    convention where updates originating from a node need to
