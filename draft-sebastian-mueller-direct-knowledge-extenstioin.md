@@ -3,7 +3,7 @@ title: "Direct Knowledge Extension to Distance Vector Routing"
 abbrev: ""
 category: exp
 
-docname: draft-mueller-direct-knowledge-extension
+docname: draft-mueller-DirectKnowledgeExtension
 submissiontype: independent  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
