@@ -9,7 +9,7 @@ Expires: 1 October 2025
 
 
          Direct Knowledge Extension to Distance Vector Routing
-                 draft-mueller-directknowledgeextension
+                    draft-mueller-dkextension-latest
 
 Abstract
 
@@ -19,6 +19,13 @@ Abstract
    change.  This Internet Draft extends a naive Distance Vector routing
    implementation with a simple flag that allows the network to recover
    quickly and reliably, with no chance of routing loops to occur.
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/Sebastianmueller22/network-protocol.
 
 Status of This Memo
 
