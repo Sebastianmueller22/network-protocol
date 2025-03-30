@@ -57,8 +57,6 @@ normative:
       TXT: https://www.rfc-editor.org/rfc/rfc6126.txt
       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc6126.txt.pdf
    
-      
-
 informative:
 
 
@@ -118,7 +116,7 @@ We only considered the cost to reach G in this example (and will continue to do 
 
 # Count to infinity
 
-Counting to an arbitrary infinity value is an attempt of naive DVR algorithms such as RIP to resolve routing loops after a network topology change. 
+Counting to an arbitrary infinity value is an attempt of naive DVR algorithms such as RIP to resolve routing loops after a network topology change.
 
 ~~~
         A
@@ -144,11 +142,11 @@ B and C do not advertise their cost of 3 to D because of split horizon. In the f
 
 In subsequent update cycles, the cost of 1 is repeatedly added to the cost in the routing loop. It takes a significant number of cycles for this cumulative cost to eventually exceed 12 — the only remaining connection to G, at which point the loop resolves and the network converges to this path.
 
-This takes a long time and in the case of a node failure, there is no way out of it other than to count up to an arbitrary infinity value (16 in this example). This value serves as an arbitrary threshold to terminate the process once it becomes excessively large. While effective in halting the loop, reaching this limit is time-consuming and restricts the range of permissible routing costs and thereby the possible size of the network. 
+This takes a long time and in the case of a node failure, there is no way out of it other than to count up to an arbitrary infinity value (16 in this example). This value serves as an arbitrary threshold to terminate the process once it becomes excessively large. While effective in halting the loop, reaching this limit is time-consuming and restricts the range of permissible routing costs and thereby the possible size of the network.
 
 # The extension
 
-This draft proposes the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down. 
+This draft proposes the convention that if a node doesn't receive an update message from one of its immediate neighbors for a certain amount of time, it tries to contact it with several messages which need to be acknowledged. If these remain unanswered, the node assumes the neighbor to be down.
 It then sends a triggered update to all other neighbors with the route to the down neighbor being set to -1 or another similarly impossible value. This can also be implemented as a separate flag in the routing information datagram. Although this is an adapted version of the "infinity value" of the RIP, it cannot be a positive number since we make no limitation on the network size. This infinity value signals the failure event to the rest of the network. All receiving nodes that aren't direct neighbors to the failed node MUST perform the following steps:
 
 - They write the infinity value into their routing table
@@ -156,7 +154,7 @@ It then sends a triggered update to all other neighbors with the route to the do
 - They ignore any regular updates that advertise a live route to the failed node
 - They likewise send a triggered update with this infinity value to all their neighbors
 
-This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored. 
+This "bad news" travels with the full speed of triggered updates through the network since all regular advertisements reporting it to be up are ignored.
 
 This goes on, until a node is reached that has the node in question as part of its direct neighbors. The receiving node then tries to reach the failed node. If it answers, the failure was actually a link failure, not a node failure, or the node recovered in the meantime. The node that receives a reply from its neighbor then immedately sends a triggered update with a "direct-knowledge-bit" (DKB) set. This is best implemented as a bit in the update datagram. Receiving nodes of such an update message MUST:
 
@@ -165,9 +163,9 @@ This goes on, until a node is reached that has the node in question as part of i
 - Start a timeout and retain the DKB until the timeout expires. Any received infinity values within this time and for this node will be ignored
 - Route traffic via the new path
 
-So the "good news" travels with the full speed of triggered updates as well. 
+So the "good news" travels with the full speed of triggered updates as well.
 
-Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is then discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggered updates and the best remaining path is propagated with the speed of triggered updates as well. 
+Since in the case of a failure no node will believe an update without direct knowledge of the nodes' continuing or regained liveness, count to infinity cannot occur. All old routing information that potentially is no longer feasible is then discarded. The best path to the node is discovered as soon as the remaining neighbors hear about the failure through the triggered updates and the best remaining path is propagated with the speed of triggered updates as well.
 
 # Example
 
