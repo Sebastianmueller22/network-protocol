@@ -19,7 +19,7 @@ author:
     fullname: Sebastian Mueller
     email: directknowledgeextension@gmx.de
 normative:
-  RFC 1058:
+  RFC_1058:
     -: ta
     target: https://www.rfc-editor.org/info/rfc1058
     title: Routing Information Protocol
@@ -32,7 +32,7 @@ normative:
       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc1058.txt.pdf
 
 
-  RFC 2453:
+  RFC_2453:
     -: ta
     target: https://datatracker.ietf.org/doc/rfc2453/
     title: RIP Version 2
@@ -45,7 +45,7 @@ normative:
       PDF: https://www.rfc-editor.org/rfc/pdfrfc/rfc2453.txt.pdf
 
 
-  RFC 6126:
+  RFC_6126:
     -: ta
     target: https://www.rfc-editor.org/info/rfc6126
     title: The Babel Routing Protocol
@@ -114,7 +114,7 @@ How do the network participants decide on the best path to G?
 
 If the link cost between E and G is 10, while all other link costs are 1, E advertises a cost of 10 to D, while F advertises a cost of 1. D calculates the total cost to reach G via E as 11 by adding 1 to E's advertised cost. However, since the path to G via F has a lower total cost of 2, D selects F as the next hop to G and updates its routing table accordingly. In the next update cycle, D advertises its path to G through itself, with a total cost of 2. B and C add their local link cost of 1 and update their total cost to reach G to 3. In the next update cycle A selects either B or C as its next hop with a cost of 4.
 
-We only considered the cost to reach G in this example (and will continue to do so for the remainder of this draft). This is simultaneously done for all other network participants though. Hopefully this quick example is enough to understand the principle of the routing algorithm. For interested readers, the according sections in the RFCs [RFC 6126]  and [RFC 2453] are reccommended.
+We only considered the cost to reach G in this example (and will continue to do so for the remainder of this draft). This is simultaneously done for all other network participants though. Hopefully this quick example is enough to understand the principle of the routing algorithm. For interested readers, the according sections in the RFCs [RFC_6126]  and [RFC_2453] are reccommended.
 
 # Count to infinity
 
@@ -138,7 +138,7 @@ Counting to an arbitrary infinity value is an attempt of naive DVR algorithms su
 
 The link costs are the same as in the previous example. We assume one basic protection against routing loops, namely split horizon with poisoned reverse. This means that, for example, when node A has node C as next hop to G in its routing table, it will not advertise this route to C (because the route goes via C, C knows about it). Routing loops can still emerge though, as we will see in this example.
 
-When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC 1058], this value is set to 16. Consequently, F advertises the value of 16 to D. Due to the implementation of split horizon, D does not advertise the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to reach G to 11.
+When the link between F and G fails, a naive implementation of DVR sets the cost between F and G to an "infinity value" — a positive integer larger than the highest legal routing cost. According to the original RIP [RFC_1058], this value is set to 16. Consequently, F advertises the value of 16 to D. Due to the implementation of split horizon, D does not advertise the cost of 2 back to F. Instead, D selects E as the next best hop to G, updating its cost to reach G to 11.
 
 B and C do not advertise their cost of 3 to D because of split horizon. In the following update cycle, B and C receive D's updated cost of 11. In the same update cycle, they each advertise their previous cost of 3 to each other and to A, because those are not their next hop, which is still D. This causes B and C to believe they can route traffic to G via one another, without realizing their paths go through D. As a result, both add the local link cost of 1 to the routing cost of 3 and propagate this "new" route to A and D in the next cycle.
 
