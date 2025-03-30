@@ -6,6 +6,8 @@ category: exp
 docname: draft-sebastian-mueller-direct-knowledge-extenstioin-latest
 submissiontype: independent  # also: "independent", "editorial", "IAB", or "IRTF"
 consensus: false
+number:
+date:
 keyword:
  - count to infinity problem
  - distance vector routing
