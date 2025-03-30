@@ -13,14 +13,11 @@ area: AREA
 keyword:
  - count to infinity problem
  - distance vector routing
-venue:
-  mail: muellersebastian@mail.com
-  github: Sebastianmueller22/network-protocol
 
 author:
  -
     fullname: Sebastian Mueller
-    email: muellersebastian@mail.com
+    email: directknowledgeextension@gmx.de
 normative:
   RFC 1058:
     -: ta
