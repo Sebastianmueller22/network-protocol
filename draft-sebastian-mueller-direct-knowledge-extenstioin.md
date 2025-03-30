@@ -9,7 +9,7 @@ number:
 date:
 consensus: false
 v: 3
-area: AREA
+# area: AREA
 keyword:
  - count to infinity problem
  - distance vector routing
