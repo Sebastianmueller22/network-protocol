@@ -101,7 +101,7 @@ Take this network as an example:
      B-----C
       \   /
        \ /
-        D 
+        D
        / \
       /   \
      E     F
@@ -127,7 +127,7 @@ Counting to an arbitrary infinity value is an attempt of naive DVR algorithms su
      B-----C
       \   /
        \ /
-        D 
+        D
        / \
       /   \
      E     F
@@ -180,7 +180,7 @@ We again take as an example the following network topology:
      B-----C
       \   /
        \ /
-        D 
+        D
        / \
       /   \
      E     F
