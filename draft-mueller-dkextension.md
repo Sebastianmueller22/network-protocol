@@ -1,13 +1,9 @@
 ---
 title: "Direct Knowledge Extension to Distance Vector Routing"
-abbrev: ""
 category: exp
 
 docname: draft-mueller-dkextension-latest
 submissiontype: independent  # also: "independent", "editorial", "IAB", or "IRTF"
-consensus: false
-number:
-date:
 keyword:
  - count to infinity problem
  - distance vector routing
