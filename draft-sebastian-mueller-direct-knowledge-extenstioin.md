@@ -190,27 +190,25 @@ We again take as an example the following network topology:
 ~~~
 In this example, contrary to before, we assume no other protection against routing loops than the proposed extension. So split horizon is not implemented, just to show that the extension is sufficient to avoid routing loops.
 
-When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the DKB set. Meanwhile B and C have sent the infinity value to A. 
+When the link between F and G fails, F sends an infinity value to D. D ignores updates reporting G as up from C,B and E and propagates the infinity value to B,C and E. E knows that G is its direct neighbor and upon receiving the infinity value, it checks if G is reachable. Since it is, it advertises a route to G via itself with the DKB set. Meanwhile B and C have sent the infinity value to A.
 D receives the advertisement with the DKB set, ignores the infinity values from F, B and C, and advertises this new route to them. B and C ignore the infinity value from A and advertise the new routing information with the DKB to A.
 
 Now the network has converged to the remaining path to G.
 
 # Security Considerations
 
-This document only tries to solve the count to infinity problem. 
+This document only tries to solve the count to infinity problem.
 
-The inherent security risks of DVR, such as rogue nodes advertising routes that don't exist, or routes for other nodes to themselves etc., apply here as well. 
+The inherent security risks of DVR, such as rogue nodes advertising routes that don't exist, or routes for other nodes to themselves etc., apply here as well.
 
 The additions proposed in this draft pose additional security risks. A rogue node could advertise all other nodes as being down whether they are its neighbor or not. This would effectively halt communication in the network for a short time and put significant strain on the network while all nodes report their neighbors to still be reachable.
 
-This is not easily preventable, but can be mitigated with another convention where updates originating from a node need to cryptographically signed before sending. The public key infrastructure necessary for that would need to be implemented on a higher network level.  
+This is not easily preventable, but can be mitigated with another convention where updates originating from a node need to cryptographically signed before sending. The public key infrastructure necessary for that would need to be implemented on a higher network level.
 
 That way, repeated infinity values from the same node can be ignored for a certain time (which might be advisable anyway, in the context of frequently failing links).
-
 
 # IANA Considerations
 
 This document has no IANA actions.
-
 
 --- back
