@@ -3,9 +3,9 @@
 
 
 Network Working Group                                         S. Mueller
-Internet-Draft                                             30 March 2025
+Internet-Draft                                         30 September 2025
 Intended status: Experimental                                           
-Expires: 1 October 2025
+Expires: 3 April 2026
 
 
          Direct Knowledge Extension to Distance Vector Routing
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 October 2025.
+   This Internet-Draft will expire on 3 April 2026.
 
 Copyright Notice
 
@@ -58,13 +58,14 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  Distance Vector Routing
-   3.  Count to infinity
-   4.  The extension
-   5.  Example
-   6.  Security Considerations
-   7.  IANA Considerations
-   8.  Normative References
+   2.  Conventions and Definitions
+   3.  Distance Vector Routing
+   4.  Count to infinity
+   5.  The extension
+   6.  Example
+   7.  Security Considerations
+   8.  IANA Considerations
+   9.  Normative References
    Author's Address
 
 1.  Introduction
@@ -90,8 +91,9 @@ Table of Contents
    RIP2 [RFC_2453] rather than more sophisticated protocols like Babel
    [RFC_6126] , which were developed to tackle the count to infinity
    problem.  Due to its simplicity, this extension should still be
-   compatible with various distance vector-based routing protocols. #
-   Conventions and Definitions
+   compatible with various distance vector-based routing protocols.
+
+2.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -107,7 +109,7 @@ Table of Contents
 
    Direct Knowledge Bit - DKB
 
-2.  Distance Vector Routing
+3.  Distance Vector Routing
 
    The basic principle of Distance Vector based routing is that nodes
    only exchange routing information with their direct neighbors.  The
@@ -152,7 +154,7 @@ Table of Contents
    the routing algorithm.  For interested readers, the according
    sections in the RFCs [RFC_6126] and [RFC_2453] are reccommended.
 
-3.  Count to infinity
+4.  Count to infinity
 
    Counting to an arbitrary infinity value is an attempt of naive DVR
    algorithms such as RIP to resolve routing loops after a network
@@ -212,7 +214,7 @@ Table of Contents
    and restricts the range of permissible routing costs and thereby the
    possible size of the network.
 
-4.  The extension
+5.  The extension
 
    This draft proposes the convention that if a node doesn't receive an
    update message from one of its immediate neighbors for a certain
@@ -278,7 +280,7 @@ Table of Contents
    remaining path is propagated with the speed of triggered updates as
    well.
 
-5.  Example
+6.  Example
 
    We again take as an example the following network topology:
 
@@ -314,7 +316,7 @@ Table of Contents
 
    Now the network has converged to the remaining path to G.
 
-6.  Security Considerations
+7.  Security Considerations
 
    This document only tries to solve the count to infinity problem.
 
@@ -339,11 +341,11 @@ Table of Contents
    for a certain time (which might be advisable anyway, in the context
    of frequently failing links).
 
-7.  IANA Considerations
+8.  IANA Considerations
 
    This document has no IANA actions.
 
-8.  Normative References
+9.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
